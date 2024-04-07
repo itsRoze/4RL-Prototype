@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
+import { Button } from "@/ui/button";
+import PhoneInput from "@/ui/login/phoneinput";
 import { redirect } from "next/navigation";
-import { sendCode, verify } from "./actions";
 
 export default async function Signup() {
   const supabase = createClient();
@@ -14,33 +15,13 @@ export default async function Signup() {
   }
 
   return (
-    <div>
-      <form className="flex w-fit items-center justify-center gap-2">
-        <label>Phone</label>
-        <input
-          type="tel"
-          name="phone"
-          className="py-2 px-4 w-60"
-          autoFocus
-          required
-        />
-        <button
-          formAction={sendCode}
-          className="border border-foreground/20 rounded-md px-4 py-2"
-        >
-          Send code
-        </button>
-      </form>
-      <form className="flex w-fit items-center justify-center gap-2">
-        <label>Code</label>
-        <input type="text" name="token" className="py-2 px-4 w-60" required />
-        <button
-          formAction={verify}
-          className="border border-foreground/20 rounded-md px-4 py-2"
-        >
-          Verify
-        </button>
-      </form>
-    </div>
+    <form className="font-extralight flex flex-col items-center gap-40">
+      <div className="text-2xl py-4 px-2 border border-black flex gap-2 items-center w-full">
+        <span>+1</span>
+        <span className="text-gray-400">US</span>
+        <PhoneInput />
+      </div>
+      <Button title="Text Code" />
+    </form>
   );
 }

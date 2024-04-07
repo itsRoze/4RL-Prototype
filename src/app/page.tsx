@@ -1,16 +1,21 @@
 import { createClient } from "@/lib/supabase/server";
+import SignoutBtn from "@/ui/signout-button";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const supabase = createClient();
-  const { data: notes } = await supabase.from("notes").select();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    redirect("/login");
+  }
 
   return (
     <main className="">
-      {notes ? (
-        <pre>{JSON.stringify(notes, null, 2)}</pre>
-      ) : (
-        <p>Error connecting Supabase</p>
-      )}
+      <p>Questionnaire</p>
+      <SignoutBtn />
     </main>
   );
 }
