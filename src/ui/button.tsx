@@ -1,4 +1,4 @@
-interface Props {
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title: string;
 }
 
@@ -18,7 +18,7 @@ export const Button: React.FC<Props> = ({ title }) => {
           stroke="black"
         />
       </svg>
-      <span className="-ml-1 font-light uppercase text-lg">
+      <span className="-ml-1 font-light text-lg">
         <code>&#8212;</code> {title}
       </span>
     </button>
