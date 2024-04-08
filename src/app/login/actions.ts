@@ -1,10 +1,11 @@
 "use server";
 
+import { signout } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 export const sendCode = async (formData: FormData) => {
-  console.log("SENDING CODE");
+  console.log(" SENDING CODE");
 
   const rawPhone = formData.get("phone") as string;
   if (!rawPhone) {
@@ -15,18 +16,32 @@ export const sendCode = async (formData: FormData) => {
   const phone = `1${rawPhone.replace(/\D/g, "")}`;
   const supabase = createClient();
 
-  const { error } = await supabase.auth.signInWithOtp({
-    phone: `+${phone}`,
-  });
+  try {
+    // This will also create the user if they don't exist
+    const { error } = await supabase.auth.signInWithOtp({
+      phone: `+${phone}`,
+    });
 
-  if (error) {
-    console.log(error);
+    if (error) {
+      console.log(error);
+      return {
+        message: error.message,
+      };
+    }
+
+    console.log("Code sent to", phone);
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        message: error.message,
+      };
+    }
+
     return {
-      message: error.message,
+      message: "Oops, something went wrong. Please try again.",
     };
   }
 
-  console.log("Code sent to", phone);
   redirect(`/login/verify?phone=${phone}`);
 };
 
@@ -38,8 +53,9 @@ export const resendCode = async (phone: string) => {
   try {
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.resend({
       phone: `+${phone}`,
+      type: "sms",
     });
 
     if (error) {
@@ -78,7 +94,10 @@ export const verify = async (
     }
 
     const supabase = createClient();
-    const { error } = await supabase.auth.verifyOtp({
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.verifyOtp({
       type: "sms",
       phone,
       token,
@@ -88,6 +107,48 @@ export const verify = async (
       console.error(error);
       return {
         message: error.message,
+      };
+    }
+
+    if (!user) {
+      return {
+        message: "Oops, something went wrong. Please try again.",
+      };
+    }
+
+    console.log("Checking database for user");
+
+    // See if user exists in database
+    const { data: userInfo, error: dbError } = await supabase
+      .from("user_info")
+      .select()
+      .eq("auth_id", user.id)
+      .maybeSingle();
+
+    if (dbError) {
+      console.error(dbError);
+      // signout user
+      await signout();
+      return {
+        message: dbError.message,
+      };
+    }
+
+    console.log(userInfo);
+
+    if (userInfo) return;
+
+    // Create new user
+    console.log("Creating new user");
+    const { error: insertError } = await supabase.from("user_info").insert({
+      auth_id: user.id,
+    });
+
+    if (insertError) {
+      console.error(insertError);
+      await signout();
+      return {
+        message: insertError.message,
       };
     }
   } catch (error) {
