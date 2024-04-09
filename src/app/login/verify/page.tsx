@@ -3,7 +3,7 @@
 import { CodeForm } from "@/ui/login/code-form";
 import { formatPhoneNumber } from "@/utils/formatPhoneNumber";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Resend } from "@/ui/login/resend";
 
 export default function Page({
@@ -13,9 +13,11 @@ export default function Page({
     phone: string;
   };
 }) {
+  const router = useRouter();
+
   const phone = searchParams.phone;
   if (!phone) {
-    redirect("/404");
+    router.push("/404");
   }
 
   return (

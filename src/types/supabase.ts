@@ -34,7 +34,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      user_info: {
+      profile: {
         Row: {
           auth_id: string | null
           completed_questionnaire: boolean

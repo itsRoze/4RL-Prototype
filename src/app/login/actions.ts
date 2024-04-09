@@ -2,6 +2,7 @@
 
 import { signout } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const sendCode = async (formData: FormData) => {
@@ -79,7 +80,7 @@ export const resendCode = async (phone: string) => {
 
 export const verify = async (
   phone: string,
-  prevState: State,
+  _prevState: State,
   formData: FormData,
 ) => {
   console.log("VERIFYING");
@@ -120,7 +121,7 @@ export const verify = async (
 
     // See if user exists in database
     const { data: userInfo, error: dbError } = await supabase
-      .from("user_info")
+      .from("profile")
       .select()
       .eq("auth_id", user.id)
       .maybeSingle();
@@ -136,20 +137,20 @@ export const verify = async (
 
     console.log(userInfo);
 
-    if (userInfo) return;
+    if (!userInfo) {
+      // Create new user
+      console.log("Creating new user");
+      const { error: insertError } = await supabase.from("profile").insert({
+        auth_id: user.id,
+      });
 
-    // Create new user
-    console.log("Creating new user");
-    const { error: insertError } = await supabase.from("user_info").insert({
-      auth_id: user.id,
-    });
-
-    if (insertError) {
-      console.error(insertError);
-      await signout();
-      return {
-        message: insertError.message,
-      };
+      if (insertError) {
+        console.error(insertError);
+        await signout();
+        return {
+          message: insertError.message,
+        };
+      }
     }
   } catch (error) {
     console.error(error);
@@ -164,5 +165,6 @@ export const verify = async (
     };
   }
 
+  revalidatePath("/", "layout");
   redirect("/");
 };

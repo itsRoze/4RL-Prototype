@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { createClient } from "./supabase/server";
 
 export async function signout() {
@@ -12,4 +13,6 @@ export async function signout() {
       message: "Failed to sign out",
     };
   }
+
+  redirect("/");
 }

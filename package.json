@@ -9,8 +9,10 @@
     "lint": "next lint",
     "preinstall": "npx only-allow pnpm",
     "db:types": "npx supabase gen types typescript --local > src/types/supabase.ts",
-    "db:pull-local": "supabase db pull --db-url postgresql://postgres:postgres@localhost:54322/postgres",
-    "db:push": "supabase db push"
+    "db:pull-local": "supabase db pull --local",
+    "db:pull-prod": "supabase db pull --linked",
+    "db:push-local": "supabase db push --local",
+    "db:push-prod": "supabase db push"
   },
   "dependencies": {
     "@supabase/ssr": "^0.1.0",
