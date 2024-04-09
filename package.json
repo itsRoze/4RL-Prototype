@@ -12,7 +12,9 @@
     "db:pull-local": "supabase db pull --local",
     "db:pull-prod": "supabase db pull --linked",
     "db:push-local": "supabase db push --local",
-    "db:push-prod": "supabase db push"
+    "db:push-prod": "supabase db push",
+    "sb:start": "supabase start",
+    "sb:stop": "supabase stop"
   },
   "dependencies": {
     "@supabase/ssr": "^0.1.0",
