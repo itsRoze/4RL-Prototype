@@ -34,6 +34,35 @@ export type Database = {
   }
   public: {
     Tables: {
+      answer: {
+        Row: {
+          id: number
+          question_id: number
+          response: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          question_id: number
+          response?: string | null
+          updated_at: string
+        }
+        Update: {
+          id?: number
+          question_id?: number
+          response?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_answer_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questionnaire"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profile: {
         Row: {
           auth_id: string | null
@@ -62,6 +91,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      questionnaire: {
+        Row: {
+          created_at: string | null
+          id: number
+          question: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          question: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          question?: string
+        }
+        Relationships: []
       }
     }
     Views: {
