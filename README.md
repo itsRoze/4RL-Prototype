@@ -38,8 +38,24 @@ SMS_TWILIO_AUTH_TOKEN=<TOKEN>
 
 Stop supabase with `pnpm sb:stop`
 
+## Testing
+
+Start supabase local
+
+```bash
+pnpm sb:start
+```
+
 Run NextJS
 
 ```bash
 pnpm dev
+```
+
+To Login for dev, use a otp test number (defined in `config.toml`). e.g.
+
+```text
+# Use pre-defined map of phone number to OTP for testing.
+[auth.sms.test_otp]
+16019839224 = "123456"
 ```
