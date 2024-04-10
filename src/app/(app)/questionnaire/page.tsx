@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/ui/button";
-import SignoutBtn from "@/ui/signout-button";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
@@ -30,9 +29,14 @@ export default async function Page() {
         {data.map((q) => (
           <Input key={q.id} id={q.id} question={q.question} />
         ))}
-        <Button type="submit" title="Cool, I'm done" />
+        <div className="w-full flex justify-end px-1 py-4">
+          <Button
+            className="float-right"
+            type="submit"
+            title="Cool, I'm done"
+          />
+        </div>
       </form>
-      <SignoutBtn />
     </>
   );
 }
@@ -52,6 +56,7 @@ const Input: React.FC<InputProps> = ({ id, question }) => {
         type="text"
         placeholder="Answer..."
         className="text-xl py-2 px-1 border border-black w-full flex-1 bg-transparent focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 rounded-none"
+        required
       />
     </div>
   );
