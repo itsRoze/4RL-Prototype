@@ -1,4 +1,4 @@
-import { IconLogout, IconMenu } from "@/ui/icons";
+import { IconLogout } from "@/ui/icons";
 import SignoutBtn from "@/ui/signout-button";
 import Image from "next/image";
 
