@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lexend.className} h-[100svh] bg-gradient-to-b from-white to-[#E3E4F4]`}
+        className={`${lexend.className} h-[100svh] bg-gradient-to-r from-purple-200/75 to-purple-50`}
       >
         {children}
       </body>
