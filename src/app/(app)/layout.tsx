@@ -6,8 +6,8 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="w-full pt-1 pb-8 px-3 overflow-auto">
-      <header className="pb-8">
+    <main className="w-full md:max-w-3xl pt-1 pb-8 overflow-auto md:px-0 px-2">
+      <header className="pb-8 w-full">
         <div className="w-20 h-auto">
           <Image
             src="/logo.svg"
@@ -18,7 +18,7 @@ export default function Layout({
           />
         </div>
       </header>
-      {children}
+      <div className="w-full animate-in">{children}</div>
     </main>
   );
 }

@@ -36,24 +36,34 @@ export type Database = {
     Tables: {
       answer: {
         Row: {
+          auth_id: string
           id: number
           question_id: number
           response: string | null
           updated_at: string
         }
         Insert: {
+          auth_id: string
           id?: number
           question_id: number
           response?: string | null
           updated_at: string
         }
         Update: {
+          auth_id?: string
           id?: number
           question_id?: number
           response?: string | null
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "public_answer_auth_id_fkey"
+            columns: ["auth_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "public_answer_question_id_fkey"
             columns: ["question_id"]
@@ -66,17 +76,31 @@ export type Database = {
       notification: {
         Row: {
           created_at: string
+          from_user: string
           id: number
+          to_user: string
         }
         Insert: {
           created_at?: string
+          from_user?: string
           id?: number
+          to_user: string
         }
         Update: {
           created_at?: string
+          from_user?: string
           id?: number
+          to_user?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_notification_to_user_fkey"
+            columns: ["to_user"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profile: {
         Row: {
