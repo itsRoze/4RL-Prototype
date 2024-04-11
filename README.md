@@ -31,6 +31,7 @@ Setup Supabase Environment Variables
 Run `pnpm sb:start` to get some keys
 
 ```text
+NEXT_PUBLIC_DOMAIN=your-domain
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SMS_TWILIO_AUTH_TOKEN=<TOKEN>

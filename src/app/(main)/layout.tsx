@@ -1,3 +1,4 @@
+import { HomeBtn } from "@/ui/homeBtn";
 import SignoutBtn from "@/ui/signout-button";
 import Image from "next/image";
 
@@ -18,7 +19,10 @@ export default function Layout({
             priority
           />
         </div>
-        <SignoutBtn />
+        <div className="flex gap-4">
+          <HomeBtn />
+          <SignoutBtn />
+        </div>
       </header>
       <div className="w-full animate-in">{children}</div>
     </main>

@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import SignoutBtn from "@/ui/signout-button";
+import QRCodeProfile from "@/ui/qr-code";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -27,9 +27,14 @@ export default async function Home() {
   }
 
   return (
-    <main className="">
-      <p>Home</p>
-      <SignoutBtn />
-    </main>
+    <section className="w-full flex flex-col items-center gap-12">
+      <h1 className="text-4xl font-extralight pb-4">
+        Have your QR code scanned by another person and let the matchmaking
+        begin
+      </h1>
+      <div className="h-auto w-40">
+        <QRCodeProfile path={"/profil/" + user.id} />
+      </div>
+    </section>
   );
 }
