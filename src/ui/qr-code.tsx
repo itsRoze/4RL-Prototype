@@ -12,6 +12,7 @@ const QRCodeProfile: React.FC<Props> = ({ path }) => {
       value={process.env.NEXT_PUBLIC_DOMAIN + path}
       viewBox={`0 0 256 256`}
       bgColor="#66000000"
+      fgColor="#4b5563"
     />
   );
 };

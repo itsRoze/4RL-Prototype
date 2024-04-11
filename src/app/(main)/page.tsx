@@ -32,8 +32,8 @@ export default async function Home() {
         Have your QR code scanned by another person and let the matchmaking
         begin
       </h1>
-      <div className="h-auto w-40">
-        <QRCodeProfile path={"/profil/" + user.id} />
+      <div className="h-auto w-48">
+        <QRCodeProfile path={"/profile/" + user.id} />
       </div>
     </section>
   );
