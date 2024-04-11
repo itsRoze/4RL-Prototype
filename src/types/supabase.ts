@@ -39,21 +39,21 @@ export type Database = {
           auth_id: string
           id: number
           question_id: number
-          response: string | null
+          response: string
           updated_at: string
         }
         Insert: {
           auth_id: string
           id?: number
           question_id: number
-          response?: string | null
+          response: string
           updated_at: string
         }
         Update: {
           auth_id?: string
           id?: number
           question_id?: number
-          response?: string | null
+          response?: string
           updated_at?: string
         }
         Relationships: [
@@ -108,18 +108,21 @@ export type Database = {
           completed_questionnaire: boolean
           created_at: string
           id: number
+          name: string | null
         }
         Insert: {
           auth_id?: string | null
           completed_questionnaire?: boolean
           created_at?: string
           id?: number
+          name?: string | null
         }
         Update: {
           auth_id?: string | null
           completed_questionnaire?: boolean
           created_at?: string
           id?: number
+          name?: string | null
         }
         Relationships: [
           {

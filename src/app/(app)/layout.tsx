@@ -1,4 +1,3 @@
-import { IconLogout } from "@/ui/icons";
 import SignoutBtn from "@/ui/signout-button";
 import Image from "next/image";
 
