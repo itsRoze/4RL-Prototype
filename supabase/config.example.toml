@@ -111,6 +111,7 @@ template = "Your code is {{ .Code }} ."
 # Use pre-defined map of phone number to OTP for testing.
 [auth.sms.test_otp]
 16019839224 = "123456"
+18399291296 = "123456"
 
 # This hook runs before a token is issued and allows you to add additional claims based on the authentication method used.
 [auth.hook.custom_access_token]
