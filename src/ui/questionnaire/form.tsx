@@ -1,6 +1,6 @@
 "use client";
 
-import { State, submitQuestionnaire } from "@/app/(app)/questionnaire/actions";
+import { State, submitQuestionnaire } from "@/app/(main)/questionnaire/actions";
 import { SubmitButton } from "./submit-button";
 import { useFormState, useFormStatus } from "react-dom";
 import clsx from "clsx";
