@@ -55,7 +55,7 @@ export const notification = pgTable("notification", {
 export const questionnaire = pgTable("questionnaire", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   id: bigint("id", { mode: "number" }).primaryKey().notNull(),
-  createdAt: timestamp("created_at", { mode: "string" }).defaultNow(),
+  created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
   question: text("question").notNull(),
 });
 
@@ -65,15 +65,15 @@ export const answer = pgTable(
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
     id: bigint("id", { mode: "number" }).primaryKey().notNull(),
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    questionId: bigint("question_id", { mode: "number" })
+    question_id: bigint("question_id", { mode: "number" })
       .notNull()
       .references(() => questionnaire.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
     response: text("response").notNull(),
-    updatedAt: timestamp("updated_at", { mode: "string" }).notNull(),
-    authId: uuid("auth_id")
+    updated_at: timestamp("updated_at", { mode: "string" }).notNull(),
+    auth_id: uuid("auth_id")
       .notNull()
       .references(() => profile.auth_id, {
         onDelete: "cascade",
@@ -83,8 +83,8 @@ export const answer = pgTable(
   (table) => {
     return {
       questionAuthUnique: unique("question_auth_unique").on(
-        table.questionId,
-        table.authId,
+        table.question_id,
+        table.auth_id,
       ),
     };
   },

@@ -144,12 +144,12 @@ export async function getQA(notiifcationId: string) {
     const data = await db
       .select()
       .from(answer)
-      .innerJoin(questionnaire, eq(questionnaire.id, answer.questionId))
-      .innerJoin(profile, eq(profile.auth_id, answer.authId))
+      .innerJoin(questionnaire, eq(questionnaire.id, answer.question_id))
+      .innerJoin(profile, eq(profile.auth_id, answer.auth_id))
       .where(
         and(
-          eq(answer.questionId, questionId),
-          inArray(answer.authId, [
+          eq(answer.question_id, questionId),
+          inArray(answer.auth_id, [
             notificationData.to_user,
             notificationData.from_user,
           ]),
