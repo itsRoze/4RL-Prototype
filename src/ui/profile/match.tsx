@@ -16,8 +16,12 @@ export const MatchStatus: React.FC<Props> = ({ currentUserId, profileId }) => {
   const supabase = createClient();
 
   useEffect(() => {
+    console.log("added");
     // Add notification
-    addNotification(currentUserId, profileId);
+    addNotification(currentUserId, profileId).then((notification) => {
+      if (!notification) return;
+      setStatus(notification.status);
+    });
 
     // Subscribe to the Notification status
     const subscription = supabase
@@ -25,13 +29,16 @@ export const MatchStatus: React.FC<Props> = ({ currentUserId, profileId }) => {
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "UPDATE",
           schema: "public",
           table: "notification",
-          filter: `to_user=eq.${profileId} from_user=eq.${currentUserId}`,
+          filter: `from_user=eq.${currentUserId}`,
         },
         (payload) => {
+          console.log(payload);
           const newNotification = payload.new as Notifcation;
+          if (newNotification.to_user !== profileId) return;
+
           setStatus(newNotification.status);
         },
       )

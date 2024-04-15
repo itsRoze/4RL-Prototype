@@ -14,7 +14,7 @@ export default async function Home() {
 
   const { data } = await supabase
     .from("profile")
-    .select("completed_questionnaire")
+    .select("name, completed_questionnaire")
     .eq("auth_id", user.id)
     .limit(1)
     .single();
@@ -31,8 +31,8 @@ export default async function Home() {
     <>
       <section className="w-full flex flex-col items-center gap-12">
         <h1 className="text-4xl font-extralight pb-4">
-          Have your QR code scanned by another person and let the matchmaking
-          begin
+          Welcome {data.name} Have your QR code scanned by another person and
+          let the matchmaking begin
         </h1>
         <div className="h-auto w-48">
           <QRCodeProfile path={"/profile/" + user.id} />

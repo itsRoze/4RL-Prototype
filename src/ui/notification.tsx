@@ -4,7 +4,10 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { IconBell } from "./icons";
 import { Notifcation, Profile } from "@/types/tables";
-import { getRecentPendingNotification } from "@/lib/actions";
+import {
+  acceptNotification,
+  getRecentPendingNotification,
+} from "@/lib/actions";
 
 interface Props {
   authId: string;
@@ -23,7 +26,10 @@ const Notification: React.FC<Props> = ({ authId }) => {
   };
 
   const accept = () => {
-    setMatch(undefined);
+    if (match) {
+      setMatch(undefined);
+      acceptNotification(match.notification.id);
+    }
   };
 
   const supabase = createClient();

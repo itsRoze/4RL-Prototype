@@ -6,6 +6,11 @@ import { db } from "./drizzle/db";
 import { notification, profile } from "./drizzle/schema";
 import { and, desc, eq, gt, or } from "drizzle-orm";
 
+const NOTIFICATION_EXPIRATION = 2; // minutes
+
+const lastTwoMinutes = () =>
+  new Date(Date.now() - NOTIFICATION_EXPIRATION * 60 * 1000).toISOString();
+
 export async function signout() {
   try {
     const supabase = createClient();
@@ -22,28 +27,29 @@ export async function signout() {
 
 export async function addNotification(from_user: string, to_user: string) {
   try {
-    // Does a notification already exist?
+    // Does a notification in the last 2 minutes already exist?
     const existingNotification = await db
       .select()
       .from(notification)
       .where(
-        or(
-          and(
-            eq(notification.from_user, from_user),
-            eq(notification.to_user, to_user),
-          ),
-          and(
-            eq(notification.from_user, to_user),
-            eq(notification.to_user, from_user),
+        and(
+          gt(notification.created_at, lastTwoMinutes()),
+          or(
+            and(
+              eq(notification.from_user, from_user),
+              eq(notification.to_user, to_user),
+            ),
+            and(
+              eq(notification.from_user, to_user),
+              eq(notification.to_user, from_user),
+            ),
           ),
         ),
       );
 
-    console.log(existingNotification);
     if (existingNotification.length) {
-      return {
-        message: "Notification already exists",
-      };
+      console.log("Notification already exists");
+      return existingNotification[0];
     }
 
     // Add a new notification
@@ -63,18 +69,14 @@ export async function addNotification(from_user: string, to_user: string) {
       .then((rows) => rows[0].name);
 
     if (!fromUserName) {
-      return {
-        message: "Failed to get Name of user",
-      };
+      console.error("Failed to get name of user");
+      return;
     }
 
     const data = { ...newNotification, fromUserName };
     return data;
   } catch (error) {
     console.error(error);
-    return {
-      message: "Failed to add notification",
-    };
   }
 }
 
@@ -88,10 +90,7 @@ export async function getRecentPendingNotification(userId: string) {
         and(
           eq(notification.to_user, userId),
           eq(notification.status, "pending"),
-          gt(
-            notification.created_at,
-            new Date(Date.now() - 2 * 60 * 1000).toISOString(),
-          ),
+          gt(notification.created_at, new Date(lastTwoMinutes()).toISOString()),
         ),
       )
       .orderBy(desc(notification.created_at))
@@ -108,5 +107,20 @@ export async function getRecentPendingNotification(userId: string) {
     return recentPendingNotification;
   } catch (error) {
     console.error(error);
+  }
+}
+
+export async function acceptNotification(notificationId: number) {
+  try {
+    // Update the notification status to accepted
+    await db
+      .update(notification)
+      .set({ status: "accepted" })
+      .where(eq(notification.id, notificationId));
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Failed to accept notification",
+    };
   }
 }
