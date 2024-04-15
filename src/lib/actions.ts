@@ -80,7 +80,7 @@ export async function addNotification(from_user: string, to_user: string) {
 
 export async function getRecentPendingNotification(userId: string) {
   try {
-    // Find the last pending notification created in the last 5 minutes
+    // Find the last pending notification created in the last 2 minutes
     const recentPendingNotification = await db
       .select()
       .from(notification)
@@ -90,13 +90,13 @@ export async function getRecentPendingNotification(userId: string) {
           eq(notification.status, "pending"),
           gt(
             notification.created_at,
-            new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+            new Date(Date.now() - 2 * 60 * 1000).toISOString(),
           ),
         ),
       )
       .orderBy(desc(notification.created_at))
       .limit(1)
-      .innerJoin(profile, eq(profile.auth_id, userId))
+      .innerJoin(profile, eq(profile.auth_id, notification.from_user))
       .then((rows) => {
         if (rows.length) {
           return rows[0];
