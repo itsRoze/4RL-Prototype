@@ -3,8 +3,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "./supabase/server";
 import { db } from "./drizzle/db";
-import { notification, profile } from "./drizzle/schema";
-import { and, desc, eq, gt, or } from "drizzle-orm";
+import { answer, notification, profile, questionnaire } from "./drizzle/schema";
+import { and, desc, eq, gt, inArray, or } from "drizzle-orm";
 
 const NOTIFICATION_EXPIRATION = 2; // minutes
 
@@ -122,5 +122,44 @@ export async function acceptNotification(notificationId: number) {
     return {
       message: "Failed to accept notification",
     };
+  }
+}
+
+const getRandomInt = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+export async function getQA(notiifcationId: string) {
+  try {
+    const notificationData = await db
+      .select()
+      .from(notification)
+      .where(eq(notification.id, Number(notiifcationId)))
+      .then((rows) => rows[0]);
+
+    if (!notificationData.from_user || !notificationData.to_user) return;
+
+    const questionId = getRandomInt(2, 3);
+
+    const data = await db
+      .select()
+      .from(answer)
+      .innerJoin(questionnaire, eq(questionnaire.id, answer.questionId))
+      .innerJoin(profile, eq(profile.auth_id, answer.authId))
+      .where(
+        and(
+          eq(answer.questionId, questionId),
+          inArray(answer.authId, [
+            notificationData.to_user,
+            notificationData.from_user,
+          ]),
+        ),
+      );
+
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error(error);
   }
 }
