@@ -61,8 +61,8 @@ export type Database = {
             foreignKeyName: "public_answer_auth_id_fkey"
             columns: ["auth_id"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "profile"
+            referencedColumns: ["auth_id"]
           },
           {
             foreignKeyName: "public_answer_question_id_fkey"
@@ -76,29 +76,39 @@ export type Database = {
       notification: {
         Row: {
           created_at: string
-          from_user: string
+          from_user: string | null
           id: number
-          to_user: string
+          status: Database["public"]["Enums"]["match_status"]
+          to_user: string | null
         }
         Insert: {
           created_at?: string
-          from_user?: string
+          from_user?: string | null
           id?: number
-          to_user: string
+          status?: Database["public"]["Enums"]["match_status"]
+          to_user?: string | null
         }
         Update: {
           created_at?: string
-          from_user?: string
+          from_user?: string | null
           id?: number
-          to_user?: string
+          status?: Database["public"]["Enums"]["match_status"]
+          to_user?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "public_notification_from_user_fkey"
+            columns: ["from_user"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["auth_id"]
+          },
           {
             foreignKeyName: "public_notification_to_user_fkey"
             columns: ["to_user"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "profile"
+            referencedColumns: ["auth_id"]
           },
         ]
       }
@@ -128,7 +138,7 @@ export type Database = {
           {
             foreignKeyName: "public_user_info_auth_id_fkey"
             columns: ["auth_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -160,7 +170,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      match_status: "pending" | "accepted"
     }
     CompositeTypes: {
       [_ in never]: never

@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Loader } from "@/ui/loader";
+import { MatchStatus } from "@/ui/profile/match";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
@@ -29,7 +30,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     >
       <section className="w-full flex-col flex items-center gap-4 pt-12">
         <Name userId={params.id} supabase={supabase} />
-        <Answers userId={params.id} supabase={supabase} />
+        {/* <Answers userId={params.id} supabase={supabase} /> */}
+        <MatchStatus currentUserId={user.id} profileId={params.id} />
       </section>
     </Suspense>
   );

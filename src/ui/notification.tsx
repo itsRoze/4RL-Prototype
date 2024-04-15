@@ -3,26 +3,39 @@
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { IconBell } from "./icons";
-import { Notifcation } from "@/types/tables";
+import { Notifcation, Profile } from "@/types/tables";
+import { getRecentPendingNotification } from "@/lib/actions";
 
 interface Props {
   authId: string;
 }
 
+type MatchRequest = {
+  notification: Notifcation;
+  profile: Profile;
+};
+
 const Notification: React.FC<Props> = ({ authId }) => {
-  const [notification, setNotification] = useState<Notifcation | undefined>();
+  const [match, setMatch] = useState<MatchRequest>();
 
   const dismiss = () => {
-    setNotification(undefined);
+    setMatch(undefined);
   };
 
   const accept = () => {
-    setNotification(undefined);
+    setMatch(undefined);
   };
 
   const supabase = createClient();
 
   useEffect(() => {
+    // Get last notification
+    getRecentPendingNotification(authId).then((notification) => {
+      if (notification) {
+        setMatch(notification);
+      }
+    });
+
     console.log("in notification useEffect");
     // on mount, add subscription
     const subscription = supabase
@@ -35,8 +48,18 @@ const Notification: React.FC<Props> = ({ authId }) => {
           table: "notification",
           filter: `to_user=eq.${authId}`,
         },
-        (payload) => {
-          setNotification(payload.new as Notifcation);
+        async (payload) => {
+          const newNotification = payload.new as Notifcation;
+          if (!newNotification.from_user) return;
+
+          const { data } = await supabase
+            .from("profile")
+            .select()
+            .eq("auth_id", newNotification.from_user)
+            .single();
+          if (!data) return;
+
+          setMatch({ notification: newNotification, profile: data });
         },
       )
       .subscribe();
@@ -48,7 +71,7 @@ const Notification: React.FC<Props> = ({ authId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authId]);
 
-  if (!notification) {
+  if (!match) {
     return null;
   }
 
@@ -60,7 +83,7 @@ const Notification: React.FC<Props> = ({ authId }) => {
             <div className="animate-pulse">
               <IconBell size={24} />
             </div>
-            <p>Received Request. &mdash; Name</p>
+            <p>Received Request. &mdash; {match.profile.name}</p>
           </div>
           <div className="flex items-center justify-center pt-8 pb-4 gap-6 font-extralight text-sm">
             <button onClick={accept}>Accept</button>

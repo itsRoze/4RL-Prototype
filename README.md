@@ -35,6 +35,8 @@ NEXT_PUBLIC_DOMAIN=your-domain
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SMS_TWILIO_AUTH_TOKEN=<TOKEN>
+
+DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres
 ```
 
 Stop supabase with `pnpm sb:stop`
