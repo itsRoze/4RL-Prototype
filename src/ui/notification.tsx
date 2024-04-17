@@ -8,6 +8,7 @@ import {
   acceptNotification,
   getRecentPendingNotification,
 } from "@/lib/actions";
+import { useRouter } from "next/navigation";
 
 interface Props {
   authId: string;
@@ -19,16 +20,21 @@ type MatchRequest = {
 };
 
 const Notification: React.FC<Props> = ({ authId }) => {
+  const router = useRouter();
+
   const [match, setMatch] = useState<MatchRequest>();
 
   const dismiss = () => {
     setMatch(undefined);
   };
 
-  const accept = () => {
+  const accept = async () => {
     if (match) {
+      const notificationId = match.notification.id;
+
       setMatch(undefined);
-      acceptNotification(match.notification.id);
+      await acceptNotification(notificationId);
+      router.push(`/match/${notificationId}`);
     }
   };
 

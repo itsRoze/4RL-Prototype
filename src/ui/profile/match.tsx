@@ -3,6 +3,7 @@
 import { addNotification } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/client";
 import { Notifcation } from "@/types/tables";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -11,12 +12,13 @@ interface Props {
 }
 
 export const MatchStatus: React.FC<Props> = ({ currentUserId, profileId }) => {
+  const router = useRouter();
+
   const [status, setStatus] = useState("pending");
 
   const supabase = createClient();
 
   useEffect(() => {
-    console.log("added");
     // Add notification
     addNotification(currentUserId, profileId).then((notification) => {
       if (!notification) return;
@@ -40,6 +42,10 @@ export const MatchStatus: React.FC<Props> = ({ currentUserId, profileId }) => {
           if (newNotification.to_user !== profileId) return;
 
           setStatus(newNotification.status);
+          if (newNotification.status === "accepted") {
+            // Redirect to chat
+            router.push(`/match/${newNotification.id}`);
+          }
         },
       )
       .subscribe();
