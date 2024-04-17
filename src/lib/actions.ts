@@ -110,12 +110,16 @@ export async function getRecentPendingNotification(userId: string) {
   }
 }
 
+const getRandomInt = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 export async function acceptNotification(notificationId: number) {
   try {
     // Update the notification status to accepted
     await db
       .update(notification)
-      .set({ status: "accepted" })
+      .set({ status: "accepted", question_to_show: getRandomInt(2, 3) })
       .where(eq(notification.id, notificationId));
   } catch (error) {
     console.error(error);
@@ -125,10 +129,6 @@ export async function acceptNotification(notificationId: number) {
   }
 }
 
-const getRandomInt = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
 export async function getQA(notiifcationId: string) {
   try {
     const notificationData = await db
@@ -137,9 +137,12 @@ export async function getQA(notiifcationId: string) {
       .where(eq(notification.id, Number(notiifcationId)))
       .then((rows) => rows[0]);
 
-    if (!notificationData.from_user || !notificationData.to_user) return;
-
-    const questionId = getRandomInt(2, 3);
+    if (
+      !notificationData.from_user ||
+      !notificationData.to_user ||
+      !notificationData.question_to_show
+    )
+      return;
 
     const data = await db
       .select()
@@ -148,7 +151,7 @@ export async function getQA(notiifcationId: string) {
       .innerJoin(profile, eq(profile.auth_id, answer.auth_id))
       .where(
         and(
-          eq(answer.question_id, questionId),
+          eq(answer.question_id, notificationData.question_to_show),
           inArray(answer.auth_id, [
             notificationData.to_user,
             notificationData.from_user,

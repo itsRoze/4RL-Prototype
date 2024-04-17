@@ -13,7 +13,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <section>
+    <section className="flex flex-col gap-6 md:pt-0 pt-12 items-center">
       <Reveal notificationId={params.id} currentUserId={user.id} />
     </section>
   );

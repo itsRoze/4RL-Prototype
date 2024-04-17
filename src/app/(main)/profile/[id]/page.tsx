@@ -57,7 +57,7 @@ async function Name({ userId, supabase }: UserProps) {
 
   if (!data.name) {
     return (
-      <h1 className="text-3xl font-extralight text-center">
+      <h1 className="md:text-3xl text-2xl font-extralight text-center">
         This user has has no name
       </h1>
     );
@@ -69,7 +69,7 @@ async function Name({ userId, supabase }: UserProps) {
     : data.name + "'s";
 
   return (
-    <h1 className="text-3xl font-extralight text-center">
+    <h1 className="md:text-3xl text-2xl font-extralight text-center">
       You scanned <span className="font-medium">{nameWithApostrophe}</span> code
     </h1>
   );

@@ -31,7 +31,7 @@ export default async function Home() {
     <>
       <section className="w-full flex flex-col items-center gap-12">
         <h1 className="text-4xl font-extralight pb-4">
-          Welcome {data.name} Have your QR code scanned by another person and
+          Welcome {data.name}. Have your QR code scanned by another person and
           let the matchmaking begin
         </h1>
         <div className="h-auto w-48">

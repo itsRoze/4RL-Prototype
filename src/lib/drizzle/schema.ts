@@ -50,6 +50,10 @@ export const notification = pgTable("notification", {
     onUpdate: "cascade",
   }),
   status: matchStatus("status").default("pending").notNull(),
+  question_to_show: bigint("question_to_show", { mode: "number" }).references(
+    () => questionnaire.id,
+    { onDelete: "cascade", onUpdate: "cascade" },
+  ),
 });
 
 export const questionnaire = pgTable("questionnaire", {

@@ -78,6 +78,7 @@ export type Database = {
           created_at: string
           from_user: string | null
           id: number
+          question_to_show: number | null
           status: Database["public"]["Enums"]["match_status"]
           to_user: string | null
         }
@@ -85,6 +86,7 @@ export type Database = {
           created_at?: string
           from_user?: string | null
           id?: number
+          question_to_show?: number | null
           status?: Database["public"]["Enums"]["match_status"]
           to_user?: string | null
         }
@@ -92,6 +94,7 @@ export type Database = {
           created_at?: string
           from_user?: string | null
           id?: number
+          question_to_show?: number | null
           status?: Database["public"]["Enums"]["match_status"]
           to_user?: string | null
         }
@@ -102,6 +105,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["auth_id"]
+          },
+          {
+            foreignKeyName: "public_notification_question_to_show_fkey"
+            columns: ["question_to_show"]
+            isOneToOne: false
+            referencedRelation: "questionnaire"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "public_notification_to_user_fkey"
