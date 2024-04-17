@@ -1,8 +1,8 @@
 "use client";
 
-import { addNotification } from "@/lib/actions";
+import { addMatch } from "@/lib/actions";
 import { createClient } from "@/lib/supabase/client";
-import { Notifcation } from "@/types/tables";
+import { Match } from "@/types/tables";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -20,31 +20,30 @@ export const MatchStatus: React.FC<Props> = ({ currentUserId, profileId }) => {
 
   useEffect(() => {
     // Add notification
-    addNotification(currentUserId, profileId).then((notification) => {
-      if (!notification) return;
-      setStatus(notification.status);
+    addMatch(currentUserId, profileId).then((match) => {
+      if (!match) return;
+      setStatus(match.status);
     });
 
     // Subscribe to the Notification status
     const subscription = supabase
-      .channel("notifcation")
+      .channel("notification")
       .on(
         "postgres_changes",
         {
           event: "UPDATE",
           schema: "public",
-          table: "notification",
+          table: "match",
           filter: `from_user=eq.${currentUserId}`,
         },
         (payload) => {
-          console.log(payload);
-          const newNotification = payload.new as Notifcation;
-          if (newNotification.to_user !== profileId) return;
+          const newMatch = payload.new as Match;
+          if (newMatch.to_user !== profileId) return;
 
-          setStatus(newNotification.status);
-          if (newNotification.status === "accepted") {
+          setStatus(newMatch.status);
+          if (newMatch.status === "accepted") {
             // Redirect to chat
-            router.push(`/match/${newNotification.id}`);
+            router.push(`/match/${newMatch.id}`);
           }
         },
       )

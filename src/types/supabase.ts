@@ -73,11 +73,12 @@ export type Database = {
           },
         ]
       }
-      notification: {
+      match: {
         Row: {
           created_at: string
           from_user: string | null
           id: number
+          matchmaking_score: string | null
           question_to_show: number | null
           status: Database["public"]["Enums"]["match_status"]
           to_user: string | null
@@ -86,6 +87,7 @@ export type Database = {
           created_at?: string
           from_user?: string | null
           id?: number
+          matchmaking_score?: string | null
           question_to_show?: number | null
           status?: Database["public"]["Enums"]["match_status"]
           to_user?: string | null
@@ -94,6 +96,7 @@ export type Database = {
           created_at?: string
           from_user?: string | null
           id?: number
+          matchmaking_score?: string | null
           question_to_show?: number | null
           status?: Database["public"]["Enums"]["match_status"]
           to_user?: string | null

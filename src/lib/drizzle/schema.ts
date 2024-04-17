@@ -35,7 +35,7 @@ export const profile = pgTable(
 );
 
 export const matchStatus = pgEnum("match_status", ["pending", "accepted"]);
-export const notification = pgTable("notification", {
+export const match = pgTable("match", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   id: bigserial("id", { mode: "number" }).primaryKey().notNull(),
   created_at: timestamp("created_at", { withTimezone: true, mode: "string" })
@@ -54,6 +54,7 @@ export const notification = pgTable("notification", {
     () => questionnaire.id,
     { onDelete: "cascade", onUpdate: "cascade" },
   ),
+  matchmaking_score: text("matchmaking_score"),
 });
 
 export const questionnaire = pgTable("questionnaire", {

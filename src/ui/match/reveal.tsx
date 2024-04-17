@@ -4,10 +4,11 @@ import { getQA } from "@/lib/actions";
 import { Answer, Profile, Questionnaire } from "@/types/tables";
 import { useEffect, useState } from "react";
 import { Button } from "../button";
+import { getRandomMatchmakingLine } from "@/utils/matchmaking";
 
 interface Props {
   currentUserId: string;
-  notificationId: string;
+  matchId: string;
 }
 
 interface Response {
@@ -16,16 +17,17 @@ interface Response {
   questionnaire: Questionnaire;
 }
 
-export const Reveal: React.FC<Props> = ({ notificationId, currentUserId }) => {
+export const Reveal: React.FC<Props> = ({ matchId, currentUserId }) => {
   const [responses, setResponses] = useState<Response[]>();
   const [revealed, setRevealed] = useState(false);
+  const [showMatchScore, setShowMatchScore] = useState(false);
 
   useEffect(() => {
-    getQA(notificationId).then((data) => {
+    getQA(matchId).then((data) => {
       if (!data || data.length < 2) return;
       setResponses(data);
     });
-  }, [notificationId]);
+  }, [matchId]);
 
   if (!responses) return null;
 
@@ -50,6 +52,18 @@ export const Reveal: React.FC<Props> = ({ notificationId, currentUserId }) => {
           onClick={() => setRevealed(true)}
         />
       )}
+      {revealed && !showMatchScore ? (
+        <Button
+          size="medium"
+          title="Matchmaking Score"
+          onClick={() => setShowMatchScore(true)}
+        />
+      ) : null}
+      {showMatchScore ? (
+        <p className="md:text-3xl text-2xl font-medium text-center">
+          {getRandomMatchmakingLine()}
+        </p>
+      ) : null}
     </>
   );
 };

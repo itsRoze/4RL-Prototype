@@ -3,8 +3,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "./supabase/server";
 import { db } from "./drizzle/db";
-import { answer, notification, profile, questionnaire } from "./drizzle/schema";
+import { answer, match, profile, questionnaire } from "./drizzle/schema";
 import { and, desc, eq, gt, inArray, or } from "drizzle-orm";
+import { getRandomMatchmakingLine } from "@/utils/matchmaking";
 
 const NOTIFICATION_EXPIRATION = 2; // minutes
 
@@ -25,36 +26,32 @@ export async function signout() {
   redirect("/");
 }
 
-export async function addNotification(from_user: string, to_user: string) {
+export async function addMatch(from_user: string, to_user: string) {
   try {
-    // Does a notification in the last 2 minutes already exist?
-    const existingNotification = await db
+    // Does a match in the last 2 minutes already exist?
+    const existingMatch = await db
       .select()
-      .from(notification)
+      .from(match)
       .where(
         and(
-          gt(notification.created_at, lastTwoMinutes()),
+          gt(match.created_at, lastTwoMinutes()),
           or(
-            and(
-              eq(notification.from_user, from_user),
-              eq(notification.to_user, to_user),
-            ),
-            and(
-              eq(notification.from_user, to_user),
-              eq(notification.to_user, from_user),
-            ),
+            and(eq(match.from_user, from_user), eq(match.to_user, to_user)),
+            and(eq(match.from_user, to_user), eq(match.to_user, from_user)),
           ),
         ),
       );
 
-    if (existingNotification.length) {
-      console.log("Notification already exists");
-      return existingNotification[0];
+    console.log(existingMatch);
+
+    if (existingMatch.length) {
+      console.log("Match already exists");
+      return existingMatch[0];
     }
 
-    // Add a new notification
-    const newNotification = await db
-      .insert(notification)
+    // Add a new match
+    const newMatch = await db
+      .insert(match)
       .values({
         from_user,
         to_user,
@@ -73,29 +70,29 @@ export async function addNotification(from_user: string, to_user: string) {
       return;
     }
 
-    const data = { ...newNotification, fromUserName };
+    const data = { ...newMatch, fromUserName };
     return data;
   } catch (error) {
     console.error(error);
   }
 }
 
-export async function getRecentPendingNotification(userId: string) {
+export async function getRecentPendingMatch(userId: string) {
   try {
-    // Find the last pending notification created in the last 2 minutes
-    const recentPendingNotification = await db
+    // Find the last pending match created in the last 2 minutes
+    const recentPendingMatch = await db
       .select()
-      .from(notification)
+      .from(match)
       .where(
         and(
-          eq(notification.to_user, userId),
-          eq(notification.status, "pending"),
-          gt(notification.created_at, new Date(lastTwoMinutes()).toISOString()),
+          eq(match.to_user, userId),
+          eq(match.status, "pending"),
+          gt(match.created_at, new Date(lastTwoMinutes()).toISOString()),
         ),
       )
-      .orderBy(desc(notification.created_at))
+      .orderBy(desc(match.created_at))
       .limit(1)
-      .innerJoin(profile, eq(profile.auth_id, notification.from_user))
+      .innerJoin(profile, eq(profile.auth_id, match.from_user))
       .then((rows) => {
         if (rows.length) {
           return rows[0];
@@ -104,7 +101,7 @@ export async function getRecentPendingNotification(userId: string) {
         return null;
       });
 
-    return recentPendingNotification;
+    return recentPendingMatch;
   } catch (error) {
     console.error(error);
   }
@@ -114,33 +111,37 @@ const getRandomInt = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export async function acceptNotification(notificationId: number) {
+export async function acceptMatch(matchId: number) {
   try {
-    // Update the notification status to accepted
+    // Update the match status to accepted
     await db
-      .update(notification)
-      .set({ status: "accepted", question_to_show: getRandomInt(2, 3) })
-      .where(eq(notification.id, notificationId));
+      .update(match)
+      .set({
+        status: "accepted",
+        question_to_show: getRandomInt(2, 3),
+        matchmaking_score: getRandomMatchmakingLine(),
+      })
+      .where(eq(match.id, matchId));
   } catch (error) {
     console.error(error);
     return {
-      message: "Failed to accept notification",
+      message: "Failed to accept match",
     };
   }
 }
 
-export async function getQA(notiifcationId: string) {
+export async function getQA(matchId: string) {
   try {
-    const notificationData = await db
+    const matchData = await db
       .select()
-      .from(notification)
-      .where(eq(notification.id, Number(notiifcationId)))
+      .from(match)
+      .where(eq(match.id, Number(matchId)))
       .then((rows) => rows[0]);
 
     if (
-      !notificationData.from_user ||
-      !notificationData.to_user ||
-      !notificationData.question_to_show
+      !matchData.from_user ||
+      !matchData.to_user ||
+      !matchData.question_to_show
     )
       return;
 
@@ -151,11 +152,8 @@ export async function getQA(notiifcationId: string) {
       .innerJoin(profile, eq(profile.auth_id, answer.auth_id))
       .where(
         and(
-          eq(answer.question_id, notificationData.question_to_show),
-          inArray(answer.auth_id, [
-            notificationData.to_user,
-            notificationData.from_user,
-          ]),
+          eq(answer.question_id, matchData.question_to_show),
+          inArray(answer.auth_id, [matchData.to_user, matchData.from_user]),
         ),
       );
 

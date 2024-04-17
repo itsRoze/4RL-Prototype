@@ -1,6 +1,6 @@
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title: string;
-  size: "small" | "medium" | "large";
+  size?: "small" | "medium" | "large";
 }
 
 export const Button: React.FC<Props> = ({

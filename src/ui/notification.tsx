@@ -3,11 +3,8 @@
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { IconBell } from "./icons";
-import { Notifcation, Profile } from "@/types/tables";
-import {
-  acceptNotification,
-  getRecentPendingNotification,
-} from "@/lib/actions";
+import { Match, Profile } from "@/types/tables";
+import { acceptMatch, getRecentPendingMatch } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -15,26 +12,26 @@ interface Props {
 }
 
 type MatchRequest = {
-  notification: Notifcation;
+  match: Match;
   profile: Profile;
 };
 
 const Notification: React.FC<Props> = ({ authId }) => {
   const router = useRouter();
 
-  const [match, setMatch] = useState<MatchRequest>();
+  const [notification, setNotification] = useState<MatchRequest>();
 
   const dismiss = () => {
-    setMatch(undefined);
+    setNotification(undefined);
   };
 
   const accept = async () => {
-    if (match) {
-      const notificationId = match.notification.id;
+    if (notification) {
+      const matchId = notification.match.id;
 
-      setMatch(undefined);
-      await acceptNotification(notificationId);
-      router.push(`/match/${notificationId}`);
+      setNotification(undefined);
+      await acceptMatch(matchId);
+      router.push(`/match/${matchId}`);
     }
   };
 
@@ -42,36 +39,35 @@ const Notification: React.FC<Props> = ({ authId }) => {
 
   useEffect(() => {
     // Get last notification
-    getRecentPendingNotification(authId).then((notification) => {
-      if (notification) {
-        setMatch(notification);
+    getRecentPendingMatch(authId).then((matchData) => {
+      if (matchData) {
+        setNotification(matchData);
       }
     });
 
-    console.log("in notification useEffect");
     // on mount, add subscription
     const subscription = supabase
-      .channel("notifcation")
+      .channel("notification")
       .on(
         "postgres_changes",
         {
           event: "INSERT",
           schema: "public",
-          table: "notification",
+          table: "match",
           filter: `to_user=eq.${authId}`,
         },
         async (payload) => {
-          const newNotification = payload.new as Notifcation;
-          if (!newNotification.from_user) return;
+          const newMatch = payload.new as Match;
+          if (!newMatch.from_user) return;
 
           const { data } = await supabase
             .from("profile")
             .select()
-            .eq("auth_id", newNotification.from_user)
+            .eq("auth_id", newMatch.from_user)
             .single();
           if (!data) return;
 
-          setMatch({ notification: newNotification, profile: data });
+          setNotification({ match: newMatch, profile: data });
         },
       )
       .subscribe();
@@ -83,7 +79,7 @@ const Notification: React.FC<Props> = ({ authId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authId]);
 
-  if (!match) {
+  if (!notification) {
     return null;
   }
 
@@ -95,7 +91,7 @@ const Notification: React.FC<Props> = ({ authId }) => {
             <div className="animate-pulse">
               <IconBell size={24} />
             </div>
-            <p>Received Request. &mdash; {match.profile.name}</p>
+            <p>Received Request. &mdash; {notification.profile.name}</p>
           </div>
           <div className="flex items-center justify-center pt-8 pb-4 gap-6 font-extralight text-sm">
             <button onClick={accept}>Accept</button>
