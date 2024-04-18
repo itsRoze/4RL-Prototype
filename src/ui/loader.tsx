@@ -1,10 +1,21 @@
-type Size = "small" | "medium" | "large";
+type Size = "xsmall" | "small" | "medium" | "large";
 
 interface Props {
   size?: Size;
 }
 
 export const Loader: React.FC<Props> = ({ size = "small" }) => {
+  if (size === "xsmall") {
+    return (
+      <div className="flex">
+        <span className="sr-only">Loading...</span>
+        <div className="h-2 w-2 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="h-2 w-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="h-2 w-2 bg-black rounded-full animate-bounce"></div>
+      </div>
+    );
+  }
+
   if (size === "small") {
     return (
       <div className="flex">
@@ -37,4 +48,14 @@ export const Loader: React.FC<Props> = ({ size = "small" }) => {
       </div>
     );
   }
+};
+
+export const Ellipsis = () => {
+  return (
+    <span className="ellipsis-anim">
+      <span>.</span>
+      <span>.</span>
+      <span>.</span>
+    </span>
+  );
 };

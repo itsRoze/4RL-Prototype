@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { IconDice } from "@/ui/icons";
 import { Loader } from "@/ui/loader";
 import { MatchStatus } from "@/ui/profile/match";
 import { redirect } from "next/navigation";
@@ -30,7 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     >
       <section className="w-full flex-col flex items-center gap-4 pt-12">
         <Name userId={params.id} supabase={supabase} />
-        {/* <Answers userId={params.id} supabase={supabase} /> */}
+        <IconDice size={64} />
         <MatchStatus currentUserId={user.id} profileId={params.id} />
       </section>
     </Suspense>
@@ -73,27 +74,4 @@ async function Name({ userId, supabase }: UserProps) {
       You scanned <span className="font-medium">{nameWithApostrophe}</span> code
     </h1>
   );
-}
-
-async function Answers({ userId, supabase }: UserProps) {
-  // Fetch answers
-  const { data: answers, error: answersError } = await supabase
-    .from("answer")
-    .select("question_id, response, questionnaire(question)")
-    .eq("auth_id", userId);
-
-  if (answersError) {
-    console.error(answersError);
-    return <div>{answersError.message}</div>;
-  }
-
-  if (answers.length === 0) {
-    return (
-      <h1 className="text-xl font-extralight text-center">
-        Oops, couldn&apos;t find any answers
-      </h1>
-    );
-  }
-
-  return <pre className="text-wrap">{JSON.stringify(answers, null, 2)}</pre>;
 }

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Match } from "@/types/tables";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Ellipsis } from "../loader";
 
 interface Props {
   currentUserId: string;
@@ -14,7 +15,7 @@ interface Props {
 export const MatchStatus: React.FC<Props> = ({ currentUserId, profileId }) => {
   const router = useRouter();
 
-  const [status, setStatus] = useState("pending");
+  const [status, setStatus] = useState<Match["status"]>("pending");
 
   const supabase = createClient();
 
@@ -55,5 +56,14 @@ export const MatchStatus: React.FC<Props> = ({ currentUserId, profileId }) => {
     };
   });
 
-  return <div>Match status: {status}</div>;
+  if (status === "pending") {
+    return (
+      <div className="flex items-center gap-1">
+        <span>Waiting for match</span>
+        <Ellipsis />
+      </div>
+    );
+  }
+
+  return <div>Accepted match!</div>;
 };
