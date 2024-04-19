@@ -62,3 +62,9 @@ To Login for dev, use a otp test number (defined in `config.toml`). e.g.
 [auth.sms.test_otp]
 16019839224 = "123456"
 ```
+
+## Deployment
+
+1. Push migration to Supabase `supabase db push`
+2. Add questions to _questionnaire_ table
+3. Add environment variables to Vercel with production keys
