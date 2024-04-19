@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <section className="flex flex-col gap-6 md:pt-0 pt-12 items-center">
-      <Reveal matchId={params.id} currentUserId={user.id} />
+      <Reveal matchId={params.id} />
     </section>
   );
 }

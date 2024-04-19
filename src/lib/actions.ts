@@ -157,9 +157,17 @@ export async function getQA(matchId: string) {
         ),
       );
 
-    console.log(data);
+    const response = [];
+    for (const row of data) {
+      response.push({
+        profileName: row.profile.name,
+        question: row.questionnaire.question,
+        response: row.answer.response,
+        score: matchData.matchmaking_score,
+      });
+    }
 
-    return data;
+    return response;
   } catch (error) {
     console.error(error);
   }
