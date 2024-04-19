@@ -67,4 +67,5 @@ To Login for dev, use a otp test number (defined in `config.toml`). e.g.
 
 1. Push migration to Supabase `supabase db push`
 2. Add questions to _questionnaire_ table
-3. Add environment variables to Vercel with production keys
+3. Turn on Realtime in Supabase for the match table
+4. Add environment variables to Vercel with production keys
