@@ -9,12 +9,5 @@ export const SubmitButton = () => {
 
   if (pending) return <Loader />;
 
-  return (
-    <Button
-      disabled={pending}
-      className="float-right"
-      type="submit"
-      title="Cool, I'm done"
-    />
-  );
+  return <Button disabled={pending} type="submit" title="Cool, I'm done" />;
 };
