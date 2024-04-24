@@ -52,19 +52,21 @@ export type State = {
 
 export const resendCode = async (phone: string) => {
   try {
+    console.log("Resending code");
     const supabase = createClient();
 
-    const { error } = await supabase.auth.resend({
+    const { error } = await supabase.auth.signInWithOtp({
       phone: `+${phone}`,
-      type: "sms",
     });
 
     if (error) {
-      console.log(error);
+      console.error(error);
       return {
         message: error.message,
       };
     }
+
+    console.log("Code resent to", phone);
   } catch (error) {
     if (error instanceof Error) {
       return {
