@@ -5,13 +5,15 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export const sendCode = async (formData: FormData) => {
+export const sendCode = async (_prevState: State, formData: FormData) => {
   console.log(" SENDING CODE");
 
   const rawPhone = formData.get("phone") as string;
   if (!rawPhone) {
     console.error("No phone number provided");
-    return;
+    return {
+      message: "No phone number provided",
+    };
   }
 
   const phone = `1${rawPhone.replace(/\D/g, "")}`;

@@ -28,7 +28,7 @@ export async function signout() {
 
 export async function addMatch(from_user: string, to_user: string) {
   try {
-    // Does a match in the last 2 minutes already exist?
+    // Does a pending match in the last 2 minutes already exist?
     const existingMatch = await db
       .select()
       .from(match)
