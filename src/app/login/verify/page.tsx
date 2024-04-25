@@ -8,6 +8,7 @@ import { useState } from "react";
 import { State, verify } from "../actions";
 import { useFormState } from "react-dom";
 import { Button } from "@/ui/button";
+import { VerifyCodeButton } from "@/ui/login/verify-code";
 
 export default function Page({
   searchParams,
@@ -61,7 +62,7 @@ export default function Page({
           ) : null}
           {error ? <p className="text-sm text-red-600 py-2">{error}</p> : null}
         </div>
-        <Button type="submit" title="Take me in" />
+        <VerifyCodeButton />
       </form>
     </>
   );
