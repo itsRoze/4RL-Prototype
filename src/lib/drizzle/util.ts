@@ -8,8 +8,8 @@ export * as DrizzleUtil from "./util";
 const analyticInsertSchema = createInsertSchema(analytic);
 type AnalyticInsertSchema = z.infer<typeof analyticInsertSchema>;
 
-export const logEvent = (
+export const logEvent = async (
   data: Omit<AnalyticInsertSchema, "id" | "created_at">,
 ) => {
-  db.insert(analytic).values(data);
+  await db.insert(analytic).values(data);
 };

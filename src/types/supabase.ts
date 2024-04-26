@@ -38,35 +38,35 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          related_user: string | null
+          related_user_auth_id: string | null
           type: Database["public"]["Enums"]["log_type"]
-          user: string
+          user_auth_id: string
         }
         Insert: {
           created_at?: string
           id?: number
-          related_user?: string | null
+          related_user_auth_id?: string | null
           type: Database["public"]["Enums"]["log_type"]
-          user: string
+          user_auth_id: string
         }
         Update: {
           created_at?: string
           id?: number
-          related_user?: string | null
+          related_user_auth_id?: string | null
           type?: Database["public"]["Enums"]["log_type"]
-          user?: string
+          user_auth_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "public_analytic_related_user_fkey"
-            columns: ["related_user"]
+            columns: ["related_user_auth_id"]
             isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["auth_id"]
           },
           {
             foreignKeyName: "public_analytic_user_fkey"
-            columns: ["user"]
+            columns: ["user_auth_id"]
             isOneToOne: false
             referencedRelation: "profile"
             referencedColumns: ["auth_id"]

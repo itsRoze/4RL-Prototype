@@ -1,6 +1,7 @@
 "use server";
 
 import { signout } from "@/lib/actions";
+import { DrizzleUtil } from "@/lib/drizzle/util";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -141,14 +142,16 @@ export const verify = async (
 
     console.log(userInfo);
 
-    if (!userInfo) {
+    if (!userInfo || !userInfo.auth_id) {
       // Create new user
       console.log("Creating new user");
-      const { error: insertError, data } = await supabase
+      const { error: insertError, data: userData } = await supabase
         .from("profile")
         .insert({
           auth_id: user.id,
-        });
+        })
+        .select()
+        .single();
 
       if (insertError) {
         console.error(insertError);
@@ -157,6 +160,23 @@ export const verify = async (
           message: insertError.message,
         };
       }
+      if (!userData || !userData.auth_id) {
+        console.error("No user data returned");
+        return {
+          message: "Failed to create user. Please try again.",
+        };
+      }
+
+      // log to analytics
+      await DrizzleUtil.logEvent({
+        user_auth_id: userData.auth_id,
+        type: "login",
+      });
+    } else {
+      await DrizzleUtil.logEvent({
+        user_auth_id: userInfo.auth_id,
+        type: "login",
+      });
     }
   } catch (error) {
     console.error(error);

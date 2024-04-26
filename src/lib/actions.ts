@@ -29,9 +29,9 @@ export async function signout() {
     await supabase.auth.signOut();
 
     // log to analytics
-    DrizzleUtil.logEvent({
+    await DrizzleUtil.logEvent({
       type: "logout",
-      user: data.user.id,
+      user_auth_id: data.user.id,
     });
   } catch (error) {
     console.error(error);

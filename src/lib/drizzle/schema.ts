@@ -109,14 +109,17 @@ export const analytic = pgTable("analytic", {
     .defaultNow()
     .notNull(),
   type: logType("type").notNull(),
-  user: uuid("user")
+  user_auth_id: uuid("user_auth_id")
     .notNull()
     .references(() => profile.auth_id, {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
-  related_user: uuid("related_user").references(() => profile.auth_id, {
-    onDelete: "cascade",
-    onUpdate: "cascade",
-  }),
+  related_user_auth_id: uuid("related_user_auth_id").references(
+    () => profile.auth_id,
+    {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    },
+  ),
 });
