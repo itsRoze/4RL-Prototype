@@ -22,16 +22,19 @@ const Notification: React.FC<Props> = ({ authId }) => {
 
   const [notification, setNotification] = useState<MatchRequest>();
 
-  const dismiss = async () => {
+  const dismiss = () => {
     if (notification) {
       // log dismiss event
-      const { error } = await supabase.from("analytic").insert({
-        type: "dismiss_match",
-        user_auth_id: authId,
-        related_user_auth_id: notification.profile.auth_id,
-      });
-
-      if (error) console.error(error);
+      supabase
+        .from("analytic")
+        .insert({
+          type: "dismiss_match",
+          user_auth_id: authId,
+          related_user_auth_id: notification.profile.auth_id,
+        })
+        .then((res) => {
+          if (res.error) console.error(res.error);
+        });
 
       setNotification(undefined);
     }
