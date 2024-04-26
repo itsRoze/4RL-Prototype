@@ -17,12 +17,24 @@ type MatchRequest = {
 };
 
 const Notification: React.FC<Props> = ({ authId }) => {
+  const supabase = createClient();
   const router = useRouter();
 
   const [notification, setNotification] = useState<MatchRequest>();
 
-  const dismiss = () => {
-    setNotification(undefined);
+  const dismiss = async () => {
+    if (notification) {
+      // log dismiss event
+      const { error } = await supabase.from("analytic").insert({
+        type: "dismiss_match",
+        user_auth_id: authId,
+        related_user_auth_id: notification.profile.auth_id,
+      });
+
+      if (error) console.error(error);
+
+      setNotification(undefined);
+    }
   };
 
   const accept = async () => {
@@ -34,8 +46,6 @@ const Notification: React.FC<Props> = ({ authId }) => {
       router.push(`/match/${matchId}`);
     }
   };
-
-  const supabase = createClient();
 
   useEffect(() => {
     // Get last notification
