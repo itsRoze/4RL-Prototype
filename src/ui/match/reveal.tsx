@@ -4,22 +4,27 @@ import { getQA } from "@/lib/actions";
 import { Answer, Match, Profile, Questionnaire } from "@/types/tables";
 import { useEffect, useState } from "react";
 import { Button } from "../button";
+import { createClient } from "@/lib/supabase/client";
 
 interface Props {
   matchId: string;
+  authId: string;
 }
 
 interface Response {
+  authId: Profile["auth_id"];
   profileName: Profile["name"];
   question: Questionnaire["question"];
   response: Answer["response"];
   score: Match["matchmaking_score"];
 }
 
-export const Reveal: React.FC<Props> = ({ matchId }) => {
+export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
   const [responses, setResponses] = useState<Response[]>();
   const [revealed, setRevealed] = useState(false);
   const [showMatchScore, setShowMatchScore] = useState(false);
+
+  const supabase = createClient();
 
   useEffect(() => {
     getQA(matchId).then((data) => {
@@ -27,6 +32,50 @@ export const Reveal: React.FC<Props> = ({ matchId }) => {
       setResponses(data);
     });
   }, [matchId]);
+
+  const revealAnswers = () => {
+    if (responses) {
+      supabase
+        .from("analytic")
+        .insert({
+          type: "reveal_answer",
+          user_auth_id: authId,
+          related_user_auth_id:
+            responses[0].authId === authId
+              ? responses[1].authId
+              : responses[0].authId,
+        })
+        .then((res) => {
+          if (res.error) {
+            console.error("Error logging revealing answers", res.error);
+          }
+        });
+
+      setRevealed(true);
+    }
+  };
+
+  const revealScore = () => {
+    if (responses) {
+      supabase
+        .from("analytic")
+        .insert({
+          type: "reveal_score",
+          user_auth_id: authId,
+          related_user_auth_id:
+            responses[0].authId === authId
+              ? responses[1].authId
+              : responses[0].authId,
+        })
+        .then((res) => {
+          if (res.error) {
+            console.error("Error logging revealing score", res.error);
+          }
+        });
+
+      setShowMatchScore(true);
+    }
+  };
 
   if (!responses) return null;
 
@@ -45,18 +94,10 @@ export const Reveal: React.FC<Props> = ({ matchId }) => {
           </li>
         </ul>
       ) : (
-        <Button
-          size="medium"
-          title="Reveal Their Answer"
-          onClick={() => setRevealed(true)}
-        />
+        <Button size="medium" title="Reveal answers" onClick={revealAnswers} />
       )}
       {revealed && !showMatchScore ? (
-        <Button
-          size="medium"
-          title="Matchmaking Score"
-          onClick={() => setShowMatchScore(true)}
-        />
+        <Button size="medium" title="Matchmaking Score" onClick={revealScore} />
       ) : null}
       {showMatchScore ? (
         <p className="md:text-3xl text-2xl font-medium text-center">

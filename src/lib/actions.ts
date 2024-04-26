@@ -200,6 +200,7 @@ export async function getQA(matchId: string) {
     const response = [];
     for (const row of data) {
       response.push({
+        authId: row.profile.auth_id,
         profileName: row.profile.name,
         question: row.questionnaire.question,
         response: row.answer.response,
