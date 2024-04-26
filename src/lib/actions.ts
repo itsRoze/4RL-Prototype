@@ -59,10 +59,7 @@ export async function addMatch(from_user: string, to_user: string) {
         ),
       );
 
-    console.log(existingMatch);
-
     if (existingMatch.length) {
-      console.log("Match already exists");
       return existingMatch[0];
     }
 
@@ -76,6 +73,11 @@ export async function addMatch(from_user: string, to_user: string) {
       .returning()
       .then((rows) => rows[0]);
 
+    if (!newMatch || !newMatch.from_user || !newMatch.to_user) {
+      console.error("Invalid match data");
+      return;
+    }
+
     const fromUserName = await db
       .select({ name: profile.name })
       .from(profile)
@@ -86,6 +88,13 @@ export async function addMatch(from_user: string, to_user: string) {
       console.error("Failed to get name of user");
       return;
     }
+
+    // log to analytics
+    DrizzleUtil.logEvent({
+      type: "attempt_match",
+      user_auth_id: newMatch.from_user,
+      related_user_auth_id: newMatch.to_user,
+    });
 
     const data = { ...newMatch, fromUserName };
     return data;
