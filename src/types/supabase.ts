@@ -228,6 +228,8 @@ export type Database = {
         | "attempt_match"
         | "reveal_answer"
         | "reveal_score"
+        | "accept_match"
+        | "dismiss_match"
       match_status: "pending" | "accepted"
     }
     CompositeTypes: {

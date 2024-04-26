@@ -96,11 +96,13 @@ export const answer = pgTable(
 );
 
 export const logType = pgEnum("log_type", [
-  "reveal_score",
-  "reveal_answer",
-  "attempt_match",
-  "logout",
   "login",
+  "logout",
+  "attempt_match",
+  "reveal_answer",
+  "reveal_score",
+  "accept_match",
+  "dismiss_match",
 ]);
 export const analytic = pgTable("analytic", {
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations

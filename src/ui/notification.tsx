@@ -26,11 +26,11 @@ const Notification: React.FC<Props> = ({ authId }) => {
   };
 
   const accept = async () => {
-    if (notification) {
+    if (notification && notification.profile.auth_id) {
       const matchId = notification.match.id;
 
       setNotification(undefined);
-      await acceptMatch(matchId);
+      await acceptMatch(matchId, notification.profile.auth_id);
       router.push(`/match/${matchId}`);
     }
   };

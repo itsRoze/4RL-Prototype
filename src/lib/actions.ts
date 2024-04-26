@@ -137,7 +137,7 @@ const getRandomInt = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export async function acceptMatch(matchId: number) {
+export async function acceptMatch(matchId: number, fromUserId: string) {
   try {
     // Update the match status to accepted
     await db
@@ -148,6 +148,20 @@ export async function acceptMatch(matchId: number) {
         matchmaking_score: getRandomMatchmakingLine(),
       })
       .where(eq(match.id, matchId));
+
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    // log to analytics
+    DrizzleUtil.logEvent({
+      type: "accept_match",
+      user_auth_id: data.user.id,
+      related_user_auth_id: fromUserId,
+    });
   } catch (error) {
     console.error(error);
     return {
