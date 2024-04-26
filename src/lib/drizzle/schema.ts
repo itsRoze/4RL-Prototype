@@ -94,3 +94,29 @@ export const answer = pgTable(
     };
   },
 );
+
+export const logType = pgEnum("log_type", [
+  "reveal_score",
+  "reveal_answer",
+  "attempt_match",
+  "logout",
+  "login",
+]);
+export const analytic = pgTable("analytic", {
+  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
+  id: bigserial("id", { mode: "number" }).primaryKey().notNull(),
+  created_at: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .defaultNow()
+    .notNull(),
+  type: logType("type").notNull(),
+  user: uuid("user")
+    .notNull()
+    .references(() => profile.auth_id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  related_user: uuid("related_user").references(() => profile.auth_id, {
+    onDelete: "cascade",
+    onUpdate: "cascade",
+  }),
+});

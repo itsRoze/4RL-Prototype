@@ -144,9 +144,11 @@ export const verify = async (
     if (!userInfo) {
       // Create new user
       console.log("Creating new user");
-      const { error: insertError } = await supabase.from("profile").insert({
-        auth_id: user.id,
-      });
+      const { error: insertError, data } = await supabase
+        .from("profile")
+        .insert({
+          auth_id: user.id,
+        });
 
       if (insertError) {
         console.error(insertError);

@@ -6,6 +6,7 @@ import { db } from "./drizzle/db";
 import { answer, match, profile, questionnaire } from "./drizzle/schema";
 import { and, desc, eq, gt, inArray, or } from "drizzle-orm";
 import { getRandomMatchmakingLine } from "@/utils/matchmaking";
+import { DrizzleUtil } from "./drizzle/util";
 
 const NOTIFICATION_EXPIRATION = 2; // minutes
 
@@ -15,7 +16,23 @@ const lastTwoMinutes = () =>
 export async function signout() {
   try {
     const supabase = createClient();
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error(error);
+      return;
+    }
+    if (!data || !data.user) {
+      console.error("No user found");
+      return;
+    }
+
     await supabase.auth.signOut();
+
+    // log to analytics
+    DrizzleUtil.logEvent({
+      type: "logout",
+      user: data.user.id,
+    });
   } catch (error) {
     console.error(error);
     return {
