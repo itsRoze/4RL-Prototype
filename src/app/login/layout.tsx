@@ -1,3 +1,4 @@
+import { Tagline } from "@/ui/tagline";
 import Image from "next/image";
 
 export default async function LoginLayout({
@@ -17,7 +18,7 @@ export default async function LoginLayout({
             priority
           />
         </div>
-        <h2 className="font-extralight text-lg">A community app</h2>
+        <Tagline />
       </header>
       <div className="w-full px-3 md:max-w-3xl">{children}</div>
     </main>
