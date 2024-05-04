@@ -12,7 +12,7 @@ export default function Signup() {
   return (
     <form
       action={dispatch}
-      className="font-extralight flex flex-col items-center gap-40"
+      className="font-extralight flex flex-col items-center gap-20"
     >
       <div className="w-full">
         <div className="text-2xl py-4 px-2 border border-black flex gap-2 items-center w-full">
@@ -20,9 +20,9 @@ export default function Signup() {
           <span className="text-gray-400">US</span>
           <PhoneInput />
         </div>
-        {error.message ? (
-          <span className="text-sm py-2 text-red-600">Failed to send</span>
-        ) : null}
+        <p className="text-sm py-2 h-8 w-full text-red-600">
+          {error.message ? "Failed to send" : ""}
+        </p>
       </div>
       <TextCodeButton />
     </form>
