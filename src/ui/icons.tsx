@@ -103,3 +103,25 @@ export const IconDice: React.FC<Icon> = ({ size = 18, color, customClass }) => {
     </svg>
   );
 };
+
+
+export const IconCamera: React.FC<Icon> = ({ size = 18, color, customClass }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox={`0 0 24 24`}
+      fill="none"
+      stroke={color || "currentColor"}
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`${customClass || ""}`}
+    >
+      <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+      <circle cx="12" cy="13" r="3" />
+    </svg>
+  );
+};
+
