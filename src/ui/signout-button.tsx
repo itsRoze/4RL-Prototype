@@ -7,7 +7,7 @@ const SignoutBtn = () => {
   return (
     <button
       onClick={async () => await signout()}
-      className="text-gray-600 hover:text-gray-500"
+      className="text-gray-500 hover:text-gray-500"
     >
       <IconLogout size={24} />
     </button>
