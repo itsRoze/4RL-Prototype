@@ -14,7 +14,9 @@
     "db:push-local": "supabase db push --local",
     "db:push-prod": "supabase db push",
     "sb:start": "supabase start",
-    "sb:stop": "supabase stop"
+    "sb:stop": "supabase stop",
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
     "@supabase/ssr": "^0.1.0",
@@ -27,6 +29,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-qr-code": "^2.0.12",
+    "react-qr-reader": "3.0.0-beta-1",
     "react-typed": "^2.0.12",
     "zod": "^3.23.4"
   },
@@ -38,7 +41,10 @@
     "drizzle-kit": "^0.20.14",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
+    "eslint-config-prettier": "^9.1.0",
     "postcss": "^8",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.14",
     "supabase": ">=1.8.1",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
