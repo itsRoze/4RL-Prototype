@@ -22,14 +22,14 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <Suspense
       fallback={
-        <div className="w-full h-full flex flex-col justify-center items-center gap-12">
+        <div className="flex h-full w-full flex-col items-center justify-center gap-12">
           <div className="">
             <Loader size="small" />
           </div>
         </div>
       }
     >
-      <section className="w-full flex-col flex items-center gap-4 pt-12">
+      <section className="flex w-full flex-col items-center gap-4 pt-12">
         <Name userId={params.id} supabase={supabase} />
         <IconDice size={64} />
         <MatchStatus currentUserId={user.id} profileId={params.id} />
@@ -58,7 +58,7 @@ async function Name({ userId, supabase }: UserProps) {
 
   if (!data.name) {
     return (
-      <h1 className="md:text-3xl text-2xl font-extralight text-center">
+      <h1 className="text-center text-2xl font-extralight md:text-3xl">
         This user has has no name
       </h1>
     );
@@ -70,7 +70,7 @@ async function Name({ userId, supabase }: UserProps) {
     : data.name + "'s";
 
   return (
-    <h1 className="md:text-3xl text-2xl font-extralight text-center">
+    <h1 className="text-center text-2xl font-extralight md:text-3xl">
       You scanned <span className="font-medium">{nameWithApostrophe}</span> code
     </h1>
   );

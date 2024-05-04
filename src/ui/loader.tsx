@@ -9,9 +9,9 @@ export const Loader: React.FC<Props> = ({ size = "small" }) => {
     return (
       <div className="flex">
         <span className="sr-only">Loading...</span>
-        <div className="h-2 w-2 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-        <div className="h-2 w-2 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-        <div className="h-2 w-2 bg-black rounded-full animate-bounce"></div>
+        <div className="h-2 w-2 animate-bounce rounded-full bg-black [animation-delay:-0.3s]"></div>
+        <div className="h-2 w-2 animate-bounce rounded-full bg-gray-500 [animation-delay:-0.15s]"></div>
+        <div className="h-2 w-2 animate-bounce rounded-full bg-black"></div>
       </div>
     );
   }
@@ -20,9 +20,9 @@ export const Loader: React.FC<Props> = ({ size = "small" }) => {
     return (
       <div className="flex">
         <span className="sr-only">Loading...</span>
-        <div className="h-4 w-4 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-        <div className="h-4 w-4 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-        <div className="h-4 w-4 bg-black rounded-full animate-bounce"></div>
+        <div className="h-4 w-4 animate-bounce rounded-full bg-black [animation-delay:-0.3s]"></div>
+        <div className="h-4 w-4 animate-bounce rounded-full bg-gray-500 [animation-delay:-0.15s]"></div>
+        <div className="h-4 w-4 animate-bounce rounded-full bg-black"></div>
       </div>
     );
   }
@@ -31,9 +31,9 @@ export const Loader: React.FC<Props> = ({ size = "small" }) => {
     return (
       <div className="flex">
         <span className="sr-only">Loading...</span>
-        <div className="h-6 w-6 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-        <div className="h-6 w-6 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-        <div className="h-6 w-6 bg-black rounded-full animate-bounce"></div>
+        <div className="h-6 w-6 animate-bounce rounded-full bg-black [animation-delay:-0.3s]"></div>
+        <div className="h-6 w-6 animate-bounce rounded-full bg-gray-500 [animation-delay:-0.15s]"></div>
+        <div className="h-6 w-6 animate-bounce rounded-full bg-black"></div>
       </div>
     );
   }
@@ -42,9 +42,9 @@ export const Loader: React.FC<Props> = ({ size = "small" }) => {
     return (
       <div className="flex">
         <span className="sr-only">Loading...</span>
-        <div className="h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-        <div className="h-8 w-8 bg-gray-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-        <div className="h-8 w-8 bg-black rounded-full animate-bounce"></div>
+        <div className="h-8 w-8 animate-bounce rounded-full bg-black [animation-delay:-0.3s]"></div>
+        <div className="h-8 w-8 animate-bounce rounded-full bg-gray-500 [animation-delay:-0.15s]"></div>
+        <div className="h-8 w-8 animate-bounce rounded-full bg-black"></div>
       </div>
     );
   }

@@ -29,8 +29,8 @@ export default async function Home() {
 
   return (
     <>
-      <section className="w-full flex flex-col items-center gap-12">
-        <h1 className="text-4xl font-extralight pb-4">
+      <section className="flex w-full flex-col items-center gap-12">
+        <h1 className="pb-4 text-4xl font-extralight">
           Welcome {data.name}. Have your QR code scanned by another person and
           let the matchmaking begin
         </h1>

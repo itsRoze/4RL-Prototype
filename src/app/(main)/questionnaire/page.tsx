@@ -21,10 +21,10 @@ export default async function Page() {
   }
   return (
     <>
-      <h1 className="text-4xl font-light pb-4">
+      <h1 className="pb-4 text-4xl font-light">
         Take a moment to share yourself with this community.
       </h1>
-      <p className="font-extralight pb-4">Keep your answers short and sweet</p>
+      <p className="pb-4 font-extralight">Keep your answers short and sweet</p>
       <QuestionForm questions={data} />
     </>
   );

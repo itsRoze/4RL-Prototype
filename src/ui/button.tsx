@@ -12,12 +12,12 @@ export const Button: React.FC<Props> = ({
     return (
       <button
         {...buttonProps}
-        className="border-2 py-3 px-6 border-black w-48 h-14 relative group"
+        className="group relative h-14 w-48 border-2 border-black px-6 py-3"
       >
-        <span className="font-light text-lg absolute top-3 left-3">
+        <span className="absolute left-3 top-3 text-lg font-light">
           <code>&#8212;</code> {title}
         </span>
-        <div className="bg-purple-200 absolute w-full h-full z-[-1] top-2 left-2 group-active:top-[0] group-active:left-[0] fill-in"></div>
+        <div className="fill-in absolute left-2 top-2 z-[-1] h-full w-full bg-purple-200 group-active:left-[0] group-active:top-[0]"></div>
       </button>
     );
   }
@@ -25,14 +25,13 @@ export const Button: React.FC<Props> = ({
   if (size === "medium") {
     return (
       <button
-        className="border-2 py-3 px-6 border-black w-52 h-14 relative group"
+        className="group relative h-14 w-52 border-2 border-black px-6 py-3"
         {...buttonProps}
       >
-        <span className="font-light text-lg absolute top-3 left-3">
+        <span className="absolute left-3 top-3 text-lg font-light">
           <code>&#8212;</code> {title}
         </span>
-        <div className="bg-purple-200 absolute w-full h-full z-[-1] top-2 left-2 group-active:top-[0] group-active:left-[0] fill-in"></div>
-
+        <div className="fill-in absolute left-2 top-2 z-[-1] h-full w-full bg-purple-200 group-active:left-[0] group-active:top-[0]"></div>
       </button>
     );
   }

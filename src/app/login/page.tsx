@@ -12,15 +12,15 @@ export default function Signup() {
   return (
     <form
       action={dispatch}
-      className="font-extralight flex flex-col items-center gap-20"
+      className="flex flex-col items-center gap-20 font-extralight"
     >
       <div className="w-full">
-        <div className="text-2xl py-4 px-2 border border-black flex gap-2 items-center w-full">
+        <div className="flex w-full items-center gap-2 border border-black px-2 py-4 text-2xl">
           <span>+1</span>
           <span className="text-gray-400">US</span>
           <PhoneInput />
         </div>
-        <p className="text-sm py-2 h-8 w-full text-red-600">
+        <p className="h-8 w-full py-2 text-sm text-red-600">
           {error.message ? "Failed to send" : ""}
         </p>
       </div>

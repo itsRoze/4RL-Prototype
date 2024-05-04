@@ -97,16 +97,16 @@ const Notification: React.FC<Props> = ({ authId }) => {
   }
 
   return (
-    <div className="flex overflow-auto fixed inset-0 z-50 outline-none focus:outline-none animate-in">
-      <div className="relative w-full max-w-xs md:max-w-sm mx-auto my-8 ">
-        <div className="px-2 py-4 border border-black shadow-sm shadow-black relative flex flex-col w-full bg-[#FEFBF5] outline-none focus:outline-none">
-          <div className="font-extralight flex gap-1 items-center justify-center">
+    <div className="animate-in fixed inset-0 z-50 flex overflow-auto outline-none focus:outline-none">
+      <div className="relative mx-auto my-8 w-full max-w-xs md:max-w-sm ">
+        <div className="relative flex w-full flex-col border border-black bg-[#FEFBF5] px-2 py-4 shadow-sm shadow-black outline-none focus:outline-none">
+          <div className="flex items-center justify-center gap-1 font-extralight">
             <div className="animate-pulse">
               <IconBell size={24} />
             </div>
             <p>Received Request. &mdash; {notification.profile.name}</p>
           </div>
-          <div className="flex items-center justify-center pt-8 pb-4 gap-6 font-extralight text-sm">
+          <div className="flex items-center justify-center gap-6 pb-4 pt-8 text-sm font-extralight">
             <button onClick={accept}>Accept</button>
             <button onClick={dismiss}>Dismiss</button>
           </div>

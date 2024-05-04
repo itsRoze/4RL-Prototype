@@ -7,9 +7,9 @@ export default async function LoginLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex flex-col w-full gap-8 items-center h-full pt-20">
-      <header className="flex flex-col gap-4 items-center">
-        <div className="w-48 h-auto">
+    <main className="flex h-full w-full flex-col items-center gap-8 pt-20">
+      <header className="flex flex-col items-center gap-4">
+        <div className="h-auto w-48">
           <Image
             src="/logo.svg"
             alt="4RL Logo"

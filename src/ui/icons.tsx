@@ -104,8 +104,11 @@ export const IconDice: React.FC<Icon> = ({ size = 18, color, customClass }) => {
   );
 };
 
-
-export const IconCamera: React.FC<Icon> = ({ size = 18, color, customClass }) => {
+export const IconCamera: React.FC<Icon> = ({
+  size = 18,
+  color,
+  customClass,
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -124,4 +127,3 @@ export const IconCamera: React.FC<Icon> = ({ size = 18, color, customClass }) =>
     </svg>
   );
 };
-

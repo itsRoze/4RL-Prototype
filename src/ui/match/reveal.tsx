@@ -81,11 +81,11 @@ export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
 
   return (
     <>
-      <h1 className="md:text-3xl text-2xl font-extralight text-center">
+      <h1 className="text-center text-2xl font-extralight md:text-3xl">
         {responses[0].question}
       </h1>
       {revealed ? (
-        <ul className="md:text-3xl text-2xl font-medium text-center space-y-4">
+        <ul className="space-y-4 text-center text-2xl font-medium md:text-3xl">
           <li>
             {responses[0].profileName}: {responses[0].response}
           </li>
@@ -100,7 +100,7 @@ export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
         <Button size="medium" title="Matchmaking Score" onClick={revealScore} />
       ) : null}
       {showMatchScore ? (
-        <p className="md:text-3xl text-2xl font-medium text-center">
+        <p className="text-center text-2xl font-medium md:text-3xl">
           {responses[0].score}
         </p>
       ) : null}
