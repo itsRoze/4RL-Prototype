@@ -5,6 +5,7 @@ import { Answer, Match, Profile, Questionnaire } from "@/types/tables";
 import { useEffect, useState } from "react";
 import { Button } from "../button";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 interface Props {
   matchId: string;
@@ -20,30 +21,32 @@ interface Response {
 }
 
 export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
-  const [responses, setResponses] = useState<Response[]>();
+  const router = useRouter();
+
+  const [response, setResponse] = useState<Response>();
   const [revealed, setRevealed] = useState(false);
   const [showMatchScore, setShowMatchScore] = useState(false);
 
   const supabase = createClient();
 
   useEffect(() => {
-    getQA(matchId).then((data) => {
-      if (!data || data.length < 2) return;
-      setResponses(data);
+    getQA(matchId, authId).then((data) => {
+      if (!data) {
+        router.push("/404");
+      }
+      setResponse(data);
     });
-  }, [matchId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchId, authId]);
 
   const revealAnswers = () => {
-    if (responses) {
+    if (response) {
       supabase
         .from("analytic")
         .insert({
           type: "reveal_answer",
           user_auth_id: authId,
-          related_user_auth_id:
-            responses[0].authId === authId
-              ? responses[1].authId
-              : responses[0].authId,
+          related_user_auth_id: response.authId,
         })
         .then((res) => {
           if (res.error) {
@@ -56,16 +59,13 @@ export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
   };
 
   const revealScore = () => {
-    if (responses) {
+    if (response) {
       supabase
         .from("analytic")
         .insert({
           type: "reveal_score",
           user_auth_id: authId,
-          related_user_auth_id:
-            responses[0].authId === authId
-              ? responses[1].authId
-              : responses[0].authId,
+          related_user_auth_id: response.authId,
         })
         .then((res) => {
           if (res.error) {
@@ -77,31 +77,33 @@ export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
     }
   };
 
-  if (!responses) return null;
+  if (!response) return null;
 
   return (
     <>
       <h1 className="text-center text-2xl font-extralight md:text-3xl">
-        {responses[0].question}
+        {response.question}
       </h1>
       {revealed ? (
-        <ul className="space-y-4 text-center text-2xl font-medium md:text-3xl">
+        <ul className="space-y-4 text-center text-2xl font-extralight md:text-3xl">
           <li>
-            {responses[0].profileName}: {responses[0].response}
-          </li>
-          <li>
-            {responses[1].profileName}: {responses[1].response}
+            <p>
+              {response.profileName} said,{" "}
+              <span className="italic">
+                &#x0022;{response.response}&#x0022;
+              </span>
+            </p>
           </li>
         </ul>
       ) : (
-        <Button size="medium" title="Reveal answers" onClick={revealAnswers} />
+        <Button size="medium" title="Reveal answer" onClick={revealAnswers} />
       )}
       {revealed && !showMatchScore ? (
         <Button size="medium" title="Matchmaking Score" onClick={revealScore} />
       ) : null}
       {showMatchScore ? (
-        <p className="text-center text-2xl font-medium md:text-3xl">
-          {responses[0].score}
+        <p className="text-center text-2xl font-extralight md:text-3xl">
+          {response.score}
         </p>
       ) : null}
     </>

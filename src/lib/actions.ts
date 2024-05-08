@@ -170,7 +170,7 @@ export async function acceptMatch(matchId: number, fromUserId: string) {
   }
 }
 
-export async function getQA(matchId: string) {
+export async function getQA(matchId: string, authId: string) {
   try {
     const matchData = await db
       .select()
@@ -185,6 +185,8 @@ export async function getQA(matchId: string) {
     )
       return;
 
+    const related_user_auth_id =
+      matchData.from_user === authId ? matchData.to_user : matchData.from_user;
     const data = await db
       .select()
       .from(answer)
@@ -193,21 +195,20 @@ export async function getQA(matchId: string) {
       .where(
         and(
           eq(answer.question_id, matchData.question_to_show),
-          inArray(answer.auth_id, [matchData.to_user, matchData.from_user]),
+          eq(answer.auth_id, related_user_auth_id),
         ),
-      );
+      )
+      .then((rows) => rows[0]);
 
-    const response = [];
-    for (const row of data) {
-      response.push({
-        authId: row.profile.auth_id,
-        profileName: row.profile.name,
-        question: row.questionnaire.question,
-        response: row.answer.response,
-        score: matchData.matchmaking_score,
-      });
-    }
+    const response = {
+      authId: data.profile.auth_id,
+      profileName: data.profile.name,
+      question: data.questionnaire.question,
+      response: data.answer.response,
+      score: matchData.matchmaking_score,
+    };
 
+    console.log("RESPONSES", response);
     return response;
   } catch (error) {
     console.error(error);
