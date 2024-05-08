@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { IconDice } from "@/ui/icons";
+import { Icon8Ball } from "@/ui/icons";
 import { Loader } from "@/ui/loader";
 import { MatchStatus } from "@/ui/profile/match";
 import { redirect } from "next/navigation";
@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     >
       <section className="flex w-full flex-col items-center gap-4 pt-12">
         <Name userId={params.id} supabase={supabase} />
-        <IconDice size={64} />
+        <Icon8Ball size={36} />
         <MatchStatus currentUserId={user.id} profileId={params.id} />
       </section>
     </Suspense>
