@@ -1,5 +1,6 @@
 import { CameraBtn } from "@/ui/cameraBtn";
 import { HomeBtn } from "@/ui/homeBtn";
+import { MatchesBtn } from "@/ui/matchesBtn";
 import SignoutBtn from "@/ui/signout-button";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +25,7 @@ export default function Layout({
         <div className="flex gap-4">
           <HomeBtn />
           <CameraBtn />
+          <MatchesBtn />
           <SignoutBtn />
         </div>
       </header>
