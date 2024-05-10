@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { Ellipsis } from "../loader";
 
 interface Props {
   matchId: string;
@@ -25,6 +26,7 @@ export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
 
   const [response, setResponse] = useState<Response>();
   const [revealed, setRevealed] = useState(false);
+  const [startComputing, setStartComputing] = useState(false);
   const [showMatchScore, setShowMatchScore] = useState(false);
 
   const supabase = createClient();
@@ -73,9 +75,19 @@ export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
           }
         });
 
-      setShowMatchScore(true);
+      setStartComputing(true);
     }
   };
+
+  useEffect(() => {
+    let timer;
+    if (startComputing) {
+      timer = setTimeout(() => {
+        setStartComputing(false);
+        setShowMatchScore(true);
+      }, 4000); // Set timeout for 4 seconds
+    }
+  }, [startComputing]);
 
   if (!response) return null;
 
@@ -98,12 +110,22 @@ export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
       ) : (
         <Button size="medium" title="Reveal answer" onClick={revealAnswers} />
       )}
-      {revealed && !showMatchScore ? (
-        <Button size="medium" title="Matchmaking Score" onClick={revealScore} />
+      {revealed && !startComputing && !showMatchScore ? (
+        <Button
+          size="medium"
+          title="Compute vibeability"
+          onClick={revealScore}
+        />
+      ) : null}
+      {startComputing ? (
+        <div className="flex gap-1">
+          <p className="font-extralight italic">Talking to the AI wizards</p>
+          <Ellipsis />
+        </div>
       ) : null}
       {showMatchScore ? (
         <p className="text-center text-2xl font-extralight md:text-3xl">
-          {response.score}
+          Vibeability: <span className="italic">{response.score}</span>
         </p>
       ) : null}
     </>
