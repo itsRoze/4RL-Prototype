@@ -208,7 +208,6 @@ export async function getQA(matchId: string, authId: string) {
       score: matchData.matchmaking_score,
     };
 
-    console.log("RESPONSES", response);
     return response;
   } catch (error) {
     console.error(error);

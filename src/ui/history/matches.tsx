@@ -2,6 +2,9 @@
 
 import { getMatchHistory } from "@/app/(main)/history/actions";
 import { useEffect, useState } from "react";
+import { Loader } from "../loader";
+import clsx from "clsx";
+import Link from "next/link";
 
 interface Props {
   authId: string;
@@ -17,7 +20,15 @@ export const Matches: React.FC<Props> = ({ authId }) => {
     });
   }, [authId]);
 
-  if (!connections || !connections.length) {
+  if (!connections) {
+    return (
+      <div className="flex justify-center pt-6">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (!connections.length) {
     return (
       <div className="space-y-2 font-light">
         <p>Looks like you haven&apos;t connected with anyone yet</p>
@@ -27,7 +38,23 @@ export const Matches: React.FC<Props> = ({ authId }) => {
   }
   return (
     <>
-      <pre>{JSON.stringify(connections, null, 2)}</pre>
+      <section className="w-full">
+        {connections.map((match, idx) => (
+          <div
+            key={match.matchId}
+            className={clsx("flex flex-col", {
+              "items-end": idx % 2 !== 0,
+            })}
+          >
+            <Link href={`/match/${match.matchId}`} className="w-2/3 py-3">
+              <p className="truncate underline underline-offset-2">
+                {match.matchedUserName}
+              </p>
+              <p className="truncate font-extralight italic">{match.score}</p>
+            </Link>
+          </div>
+        ))}
+      </section>
     </>
   );
 };
