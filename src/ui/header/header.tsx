@@ -1,5 +1,3 @@
-"use client";
-
 import { CameraBtn } from "@/ui/header/cameraBtn";
 import { HomeBtn } from "@/ui/header/homeBtn";
 import { MatchesBtn } from "@/ui/header/matchesBtn";

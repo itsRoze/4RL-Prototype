@@ -7,8 +7,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export const sendCode = async (_prevState: State, formData: FormData) => {
-  console.log(" SENDING CODE");
-
   const rawPhone = formData.get("phone") as string;
   if (!rawPhone) {
     console.error("No phone number provided");
@@ -27,13 +25,11 @@ export const sendCode = async (_prevState: State, formData: FormData) => {
     });
 
     if (error) {
-      console.log(error);
+      console.error(error);
       return {
         message: error.message,
       };
     }
-
-    console.log("Code sent to", phone);
   } catch (error) {
     if (error instanceof Error) {
       return {
@@ -55,7 +51,6 @@ export type State = {
 
 export const resendCode = async (phone: string) => {
   try {
-    console.log("Resending code");
     const supabase = createClient();
 
     const { error } = await supabase.auth.signInWithOtp({
@@ -68,8 +63,6 @@ export const resendCode = async (phone: string) => {
         message: error.message,
       };
     }
-
-    console.log("Code resent to", phone);
   } catch (error) {
     if (error instanceof Error) {
       return {
@@ -88,8 +81,6 @@ export const verify = async (
   _prevState: State,
   formData: FormData,
 ) => {
-  console.log("VERIFYING");
-
   try {
     const token = formData.get("token") as string;
     if (!token) {
@@ -122,8 +113,6 @@ export const verify = async (
       };
     }
 
-    console.log("Checking database for user");
-
     // See if user exists in database
     const { data: userInfo, error: dbError } = await supabase
       .from("profile")
@@ -140,11 +129,8 @@ export const verify = async (
       };
     }
 
-    console.log(userInfo);
-
     if (!userInfo || !userInfo.auth_id) {
       // Create new user
-      console.log("Creating new user");
       const { error: insertError, data: userData } = await supabase
         .from("profile")
         .insert({

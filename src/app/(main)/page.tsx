@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import Notification from "@/ui/notification";
 import QRCodeProfile from "@/ui/qr-code";
+import { MatchSubscription } from "@/ui/match-subscription";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -39,6 +40,7 @@ export default async function Home() {
         </div>
       </section>{" "}
       <Notification authId={user.id} />
+      <MatchSubscription currentUserId={user.id} />
     </>
   );
 }

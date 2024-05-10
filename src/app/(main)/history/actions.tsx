@@ -5,7 +5,6 @@ import { match, profile, questionnaire } from "@/lib/drizzle/schema";
 import { and, eq, ne, or } from "drizzle-orm";
 
 export const getMatchHistory = async (authId: string) => {
-  console.log("getting match history");
   const data = await db
     .select({
       matchId: match.id,
@@ -28,8 +27,6 @@ export const getMatchHistory = async (authId: string) => {
         or(eq(match.to_user, authId), eq(match.from_user, authId)),
       ),
     );
-
-  console.log("completed");
 
   return data;
 };
