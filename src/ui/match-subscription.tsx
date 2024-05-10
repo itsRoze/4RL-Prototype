@@ -15,7 +15,7 @@ export const MatchSubscription: React.FC<Props> = ({ currentUserId }) => {
   useEffect(() => {
     // Subscribe to the Notification status
     const subscription = supabase
-      .channel("notification")
+      .channel("accept-status")
       .on(
         "postgres_changes",
         {
