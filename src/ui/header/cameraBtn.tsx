@@ -1,19 +1,19 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { IconCrystalBall } from "./icons";
+import { IconCamera } from "../icons";
 
-export const MatchesBtn = () => {
+export const CameraBtn = () => {
   const pathname = usePathname();
   const router = useRouter();
-  if (pathname === "/history" || pathname === "/questionnaire") return null;
+  if (pathname === "/scan" || pathname === "/questionnaire") return null;
 
   return (
     <button
       className="text-gray-600 hover:text-gray-500 "
-      onClick={() => router.push("/history")}
+      onClick={() => router.push("/scan")}
     >
-      <IconCrystalBall size={24} />
+      <IconCamera size={24} />
     </button>
   );
 };

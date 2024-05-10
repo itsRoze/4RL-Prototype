@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { IconHome } from "./icons";
+import { IconHome } from "../icons";
 
 export const HomeBtn = () => {
   const pathname = usePathname();

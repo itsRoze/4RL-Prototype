@@ -1,7 +1,7 @@
 "use client";
 
 import { signout } from "@/lib/actions";
-import { IconLogout } from "./icons";
+import { IconLogout } from "../icons";
 import { useState } from "react";
 
 const SignoutBtn = () => {
