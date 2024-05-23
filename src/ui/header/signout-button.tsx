@@ -12,7 +12,7 @@ const SignoutBtn = () => {
         onClick={() => setShowPrompt(true)}
         className="text-gray-500 hover:text-gray-500"
       >
-        <IconLogout size={24} />
+        <IconLogout size={28} />
       </button>
       <SignoutPrompt show={showPrompt} setShow={setShowPrompt} />
     </>

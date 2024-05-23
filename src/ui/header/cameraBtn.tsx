@@ -13,7 +13,7 @@ export const CameraBtn = () => {
       className="text-gray-600 hover:text-gray-500 "
       onClick={() => router.push("/scan")}
     >
-      <IconCamera size={24} />
+      <IconCamera size={28} />
     </button>
   );
 };

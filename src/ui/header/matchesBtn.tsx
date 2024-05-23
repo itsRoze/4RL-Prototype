@@ -13,7 +13,7 @@ export const MatchesBtn = () => {
       className="text-gray-600 hover:text-gray-500 "
       onClick={() => router.push("/history")}
     >
-      <IconCrystalBall size={24} />
+      <IconCrystalBall size={28} />
     </button>
   );
 };

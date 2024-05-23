@@ -17,7 +17,7 @@ export const Header: React.FC = () => {
           priority
         />
       </Link>
-      <div className="flex gap-4">
+      <div className="flex gap-6">
         <HomeBtn />
         <CameraBtn />
         <MatchesBtn />

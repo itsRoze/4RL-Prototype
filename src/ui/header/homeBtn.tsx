@@ -13,7 +13,7 @@ export const HomeBtn = () => {
       className="text-gray-600 hover:text-gray-500"
       onClick={() => router.push("/")}
     >
-      <IconHome size={24} />
+      <IconHome size={28} />
     </button>
   );
 };
