@@ -31,10 +31,13 @@ export default async function Home() {
   return (
     <>
       <section className="flex w-full flex-col items-center gap-12">
-        <h1 className="pb-4 text-4xl font-extralight">
-          Welcome {data.name}. Have your QR code scanned by another person and
-          let the fun begin
-        </h1>
+        <div>
+          <h1 className="pb-2 text-3xl font-extralight">Welcome {data.name}</h1>
+          <p className="text-xl font-extralight">
+            Scan someone else&apos;s QR code (or have them scan yours) and let
+            the fun begin
+          </p>
+        </div>
         <div className="h-auto w-48">
           <QRCodeProfile path={"/profile/" + user.id} />
         </div>
