@@ -45,24 +45,6 @@ export async function signout() {
 
 export async function addMatch(from_user: string, to_user: string) {
   try {
-    // Does a pending match in the last 2 minutes already exist?
-    const existingMatch = await db
-      .select()
-      .from(match)
-      .where(
-        and(
-          gt(match.created_at, lastTwoMinutes()),
-          or(
-            and(eq(match.from_user, from_user), eq(match.to_user, to_user)),
-            and(eq(match.from_user, to_user), eq(match.to_user, from_user)),
-          ),
-        ),
-      );
-
-    if (existingMatch.length) {
-      return existingMatch[0];
-    }
-
     // Add a new match
     const newMatch = await db
       .insert(match)
@@ -98,36 +80,6 @@ export async function addMatch(from_user: string, to_user: string) {
 
     const data = { ...newMatch, fromUserName };
     return data;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-export async function getRecentPendingMatch(userId: string) {
-  try {
-    // Find the last pending match created in the last 2 minutes
-    const recentPendingMatch = await db
-      .select()
-      .from(match)
-      .where(
-        and(
-          eq(match.to_user, userId),
-          eq(match.status, "pending"),
-          gt(match.created_at, new Date(lastTwoMinutes()).toISOString()),
-        ),
-      )
-      .orderBy(desc(match.created_at))
-      .limit(1)
-      .innerJoin(profile, eq(profile.auth_id, match.from_user))
-      .then((rows) => {
-        if (rows.length) {
-          return rows[0];
-        }
-
-        return null;
-      });
-
-    return recentPendingMatch;
   } catch (error) {
     console.error(error);
   }

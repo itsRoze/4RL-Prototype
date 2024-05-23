@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import { IconBell } from "./icons";
 import { Match, Profile } from "@/types/tables";
-import { acceptMatch, getRecentPendingMatch } from "@/lib/actions";
+import { acceptMatch } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 
 interface Props {
@@ -51,13 +51,6 @@ const Notification: React.FC<Props> = ({ authId }) => {
   };
 
   useEffect(() => {
-    // Get last notification
-    getRecentPendingMatch(authId).then((matchData) => {
-      if (matchData) {
-        setNotification(matchData);
-      }
-    });
-
     // on mount, add subscription
     const subscription = supabase
       .channel("notification")

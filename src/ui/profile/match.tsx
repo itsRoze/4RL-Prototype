@@ -23,7 +23,6 @@ export const MatchStatus: React.FC<Props> = ({ currentUserId, profileId }) => {
     // Add notification
     addMatch(currentUserId, profileId).then((match) => {
       if (!match) return;
-      if (match.status === "accepted") router.push(`/match/${match.id}`);
       setStatus(match.status);
     });
 
