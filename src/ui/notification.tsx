@@ -23,6 +23,7 @@ const Notification: React.FC<Props> = ({ authId }) => {
   const [notification, setNotification] = useState<MatchRequest>();
 
   const dismiss = () => {
+    console.log("hit");
     if (notification) {
       // log dismiss event
       supabase
@@ -90,16 +91,21 @@ const Notification: React.FC<Props> = ({ authId }) => {
   }
 
   return (
-    <div className="animate-in fixed inset-0 z-40 flex overflow-auto outline-none focus:outline-none">
+    <div className="animate-in fixed inset-0 -top-16 z-50 flex overflow-hidden outline-none focus:outline-none">
       <div className="relative mx-auto my-8 w-full max-w-xs md:max-w-sm ">
-        <div className="relative flex w-full flex-col border border-black bg-[#FEFBF5] px-2 py-4 shadow-sm shadow-black outline-none focus:outline-none">
-          <div className="flex items-center justify-center gap-1 font-extralight">
-            <div className="animate-pulse">
-              <IconBell size={24} />
+        <div className="bell relative z-10">
+          <div className="bell-border"></div>
+          <div className="flex w-full flex-col items-center pt-4">
+            <div className="relative font-extralight">
+              <i className="btn-bell">
+                <IconBell size={24} />
+              </i>
+              <div className="ml-5 ">
+                Received Request. &mdash; {notification.profile.name}
+              </div>
             </div>
-            <p>Received Request. &mdash; {notification.profile.name}</p>
           </div>
-          <div className="flex items-center justify-center gap-6 pb-4 pt-8 text-sm font-extralight">
+          <div className="relative z-20 flex items-center justify-center gap-6 pt-8 text-sm font-extralight">
             <button onClick={accept}>Accept</button>
             <button onClick={dismiss}>Dismiss</button>
           </div>

@@ -38,9 +38,9 @@ const SignoutPrompt: React.FC<PromptProps> = ({ show, setShow }) => {
   }
 
   return (
-    <div className="animate-in fixed inset-0 z-50 flex overflow-auto outline-none focus:outline-none">
+    <div className="animate-in fixed inset-0 z-40 flex overflow-auto outline-none focus:outline-none">
       <div className="relative mx-auto my-8 w-full max-w-xs md:max-w-sm ">
-        <div className="relative flex w-full flex-col border border-black bg-[#FEFBF5] px-2 py-4 shadow-sm shadow-black outline-none focus:outline-none">
+        <div className="relative flex w-full flex-col  bg-[#FEFBF5] px-2 py-4 shadow-sm shadow-black outline-none focus:outline-none">
           <div className="flex items-center justify-center gap-1 font-extralight">
             <p>Logout?</p>
           </div>

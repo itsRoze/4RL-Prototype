@@ -30,6 +30,7 @@ export default async function Home() {
 
   return (
     <>
+      <Notification authId={user.id} />
       <section className="flex w-full flex-col items-center gap-12">
         <div>
           <h1 className="pb-2 text-3xl font-extralight">Welcome {data.name}</h1>
@@ -42,7 +43,6 @@ export default async function Home() {
           <QRCodeProfile path={"/profile/" + user.id} />
         </div>
       </section>{" "}
-      <Notification authId={user.id} />
       <MatchSubscription currentUserId={user.id} />
     </>
   );
