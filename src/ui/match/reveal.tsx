@@ -108,14 +108,18 @@ export const Reveal: React.FC<Props> = ({ matchId, authId }) => {
           </li>
         </ul>
       ) : (
-        <Button size="medium" title="Reveal answer" onClick={revealAnswers} />
+        <div className="animate-wiggle">
+          <Button size="medium" title="Reveal answer" onClick={revealAnswers} />
+        </div>
       )}
       {revealed && !startComputing && !showMatchScore ? (
-        <Button
-          size="medium"
-          title="Compute vibeability"
-          onClick={revealScore}
-        />
+        <div className="animate-wiggle">
+          <Button
+            size="medium"
+            title="Compute vibeability"
+            onClick={revealScore}
+          />
+        </div>
       ) : null}
       {startComputing ? (
         <div className="flex gap-1">
