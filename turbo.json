@@ -9,6 +9,14 @@
       "outputs": [],
       "cache": false
     },
+    "@beta/supabase#sb:reset": {
+      "outputs": [],
+      "cache": false
+    },
+    "@beta/supabase#sb:test": {
+      "outputs": [],
+      "cache": false
+    },
     "@beta/supabase#sb:types": {
       "outputs": [],
       "cache": false

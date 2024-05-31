@@ -12,6 +12,8 @@
     "sso": "aws sso login --sso-session=4rl",
     "sb:start": "turbo sb:start",
     "sb:stop": "turbo sb:stop",
+    "sb:reset": "turbo sb:reset",
+    "sb:test": "turbo sb:test",
     "sb:types": "turbo sb:types",
     "sb:pull-local": "turbo sb:pull-local",
     "sb:pull-prod": "turbo sb:pull-prod",
