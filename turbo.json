@@ -1,14 +1,53 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "@beta/supabase#sb:start": {
+      "outputs": [],
+      "cache": false
+    },
+    "@beta/supabase#sb:stop": {
+      "outputs": [],
+      "cache": false
+    },
+    "@beta/supabase#sb:types": {
+      "outputs": [],
+      "cache": false
+    },
+    "@beta/supabase#sb:pull-local": {
+      "outputs": [],
+      "cache": false
+    },
+    "@beta/supabase#sb:pull-prod": {
+      "outputs": [],
+      "cache": false
+    },
+    "@beta/supabase#sb:push-local": {
+      "outputs": [],
+      "cache": false
+    },
+    "@beta/supabase#sb:push-prod": {
+      "outputs": [],
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": []
+      "outputs": ["build/**"]
     },
     "typecheck": {
       "dependsOn": ["^build"]
     },
     "lint": {},
+    "format": {
+      "outputs": []
+    },
+
+    "format:fix": {
+      "outputs": []
+    },
+    "clean": {
+      "outputs": [],
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true

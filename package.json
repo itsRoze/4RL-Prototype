@@ -7,15 +7,28 @@
     "build:web": "sst shell 'turbo build --filter=@beta/web'",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
     "deploy:prod": "sst deploy --stage=production",
-    "sso": "aws sso login --sso-session=4rl"
+    "sso": "aws sso login --sso-session=4rl",
+    "sb:start": "turbo sb:start",
+    "sb:stop": "turbo sb:stop",
+    "sb:types": "turbo sb:types",
+    "sb:pull-local": "turbo sb:pull-local",
+    "sb:pull-prod": "turbo sb:pull-prod",
+    "sb:push-local": "turbo sb:push-local",
+    "sb:push-prod": "turbo sb:push-prod",
+    "format": "turbo format",
+    "format:fix": "turbo format:fix"
   },
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/*",
+    "supabase"
   ],
   "devDependencies": {
     "@types/aws-lambda": "8.10.138",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.6.1",
     "typescript": "^5.4.5"
   },
   "dependencies": {
