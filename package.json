@@ -6,7 +6,9 @@
     "build": "turbo build",
     "build:web": "sst shell 'turbo build --filter=@beta/web'",
     "lint": "turbo lint",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "deploy:prod": "sst deploy --stage=production",
+    "sso": "aws sso login --sso-session=4rl"
   },
   "workspaces": [
     "packages/*",
