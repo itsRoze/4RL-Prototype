@@ -1,17 +1,16 @@
 {
   "name": "@beta/supabase",
+  "types": "./index.ts",
   "scripts": {
-    "start": "supabase status || supabase start",
-    "reset": "supabase db reset || supabase start",
-    "test": "supabase db test",
-    "lint": "supabase db lint",
-    "deploy": "supabase link --project-ref $SUPABASE_PROJECT_REF && supabase db push",
     "sb:start": "supabase status || supabase start",
     "sb:stop": "supabase stop",
+    "sb:reset": "supabase db reset || supabase start",
+    "sb:test": "supabase db test",
     "sb:types": "supabase gen types typescript --local > ./types/database-types.ts && prettier --write \"./types/**/*.{ts,tsx,md}\"",
     "sb:pull-local": "supabase db pull --local",
     "sb:pull-prod": "supabase db pull --linked",
     "sb:push-local": "supabase db push --local",
-    "sb:push-prod": "supabase db push"
+    "sb:push-prod": "supabase db push",
+    "lint": "supabase db lint"
   }
 }

@@ -15,8 +15,12 @@ export default $config({
     };
   },
   async run() {
+    const supabaseUrl = new sst.Secret("SupabaseUrl");
+    const supabaseAnonKey = new sst.Secret("SupabaseAnonKey");
+
     new sst.aws.Remix("RemixApp", {
       path: "./apps/web",
+      link: [supabaseUrl, supabaseAnonKey],
       domain:
         $app.stage === "production"
           ? {
