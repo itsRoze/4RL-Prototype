@@ -21,15 +21,6 @@ Project dependencies:
 pnpm i
 ```
 
-Supabase CLI:
-
-macOs:
-"`shell"
-brew install supabase/tap/supabase
-"`"
-
-See more options: https://supabase.com/docs/guides/cli/getting-started
-
 SST: https://ion.sst.dev/docs/reference/cli/
 
 ### Supabase
