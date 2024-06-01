@@ -17,6 +17,7 @@ yarn-error.log*
 .env
 .env*.local
 secrets.env
+prod.env
 
 # sst
 .sst
