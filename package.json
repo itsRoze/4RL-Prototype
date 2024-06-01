@@ -20,7 +20,9 @@
     "sb:push-local": "turbo sb:push-local",
     "sb:push-prod": "turbo sb:push-prod",
     "format": "turbo format",
-    "format:fix": "turbo format:fix"
+    "format:fix": "turbo format:fix",
+    "load-secrets:prod": "sst secret load ./prod.env --stage=production",
+    "load-secrets:local": "sst secret load ./secrets.env"
   },
   "workspaces": [
     "packages/*",
