@@ -22,7 +22,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { supabase } = await createClient(request);
   const user = (await supabase.auth.getUser()).data.user;
   const isAuthenticated = !!user;
-  console.log("ISAUTH", isAuthenticated);
   return json({ isAuthenticated });
 };
 
@@ -35,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="flex h-[100svh] w-full flex-col items-center bg-gradient-to-r from-purple-400/35 to-white">
         {children}
         <ScrollRestoration />
         <Scripts />
