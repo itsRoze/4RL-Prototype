@@ -6,9 +6,12 @@ import {
   json,
 } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import { Button } from "~/components/button";
 import ErrorCallout from "~/components/error-callout";
-import { resendCode } from "~/utils/auth.server";
+import { Loader } from "~/components/loader";
+import { resendCode, verifyCode } from "~/utils/auth.server";
 import { formatPhoneForClient } from "~/utils/formatPhoneNumber";
+import { useIsPending } from "~/utils/hooks";
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,11 +41,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       ok: error ? false : true,
     };
   }
+
+  if (_action === "submit") {
+    await verifyCode();
+    return null;
+  }
 };
 
 export default function Index() {
   const { phone } = useLoaderData<typeof loader>();
-  const actionData = useActionData<typeof action>();
 
   return (
     <>
@@ -57,22 +64,7 @@ export default function Index() {
           </Link>
         </div>
       </div>
-      <Form>
-        <div className="w-full">
-          <div className="flex w-full items-center gap-2 border border-black px-2 py-4 text-2xl">
-            <input
-              type="text"
-              placeholder="XXXXXX"
-              name="token"
-              className="focus-visible:ring-ring w-11/12 flex-1 bg-transparent focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
-              maxLength={6}
-            />
-          </div>
-          {actionData?.error ? (
-            <ErrorCallout message={actionData.error} />
-          ) : null}
-        </div>
-      </Form>
+      <TokenForm />
     </>
   );
 }
@@ -80,7 +72,7 @@ export default function Index() {
 interface ResendProps {
   phone: string;
 }
-export const Resend: React.FC<ResendProps> = ({ phone }) => {
+const Resend: React.FC<ResendProps> = ({ phone }) => {
   const actionData = useActionData<typeof action>();
 
   if (actionData?.ok) {
@@ -93,6 +85,42 @@ export const Resend: React.FC<ResendProps> = ({ phone }) => {
       <button type="submit" name="_action" value="resend" className="underline">
         Resend
       </button>
+    </Form>
+  );
+};
+
+const TokenForm = () => {
+  const actionData = useActionData<typeof action>();
+
+  const isPending = useIsPending();
+  return (
+    <Form
+      method="POST"
+      className="flex flex-col items-center gap-40 font-extralight"
+    >
+      <div className="w-full">
+        <div className="flex w-full items-center gap-2 border border-black px-2 py-4 text-2xl">
+          <input
+            type="text"
+            placeholder="XXXXXX"
+            name="token"
+            className="focus-visible:ring-ring w-11/12 flex-1 bg-transparent focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
+            maxLength={6}
+          />
+        </div>
+        {actionData?.error ? <ErrorCallout message={actionData.error} /> : null}
+      </div>
+      {isPending ? (
+        <Loader />
+      ) : (
+        <Button
+          type="submit"
+          name="_action"
+          disabled={isPending}
+          value="submit"
+          title="Take me in"
+        />
+      )}
     </Form>
   );
 };

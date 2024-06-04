@@ -87,3 +87,12 @@ export const resendCode = async (phone: string, request: Request) => {
   }
   return { error: undefined };
 };
+
+// TODO: Complete
+export const verifyCode = async () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("done");
+    }, 2000);
+  });
+};

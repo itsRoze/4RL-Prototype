@@ -7,7 +7,9 @@ import {
 import { Form, useActionData } from "@remix-run/react";
 import { Button } from "~/components/button";
 import ErrorCallout from "~/components/error-callout";
+import { Loader } from "~/components/loader";
 import { sendCode } from "~/utils/auth.server";
+import { useIsPending } from "~/utils/hooks";
 
 export const meta: MetaFunction = () => {
   return [
@@ -57,5 +59,11 @@ export default function Index() {
 }
 
 const TextCodeButton = () => {
+  const isPending = useIsPending();
+
+  if (isPending) {
+    return <Loader />;
+  }
+
   return <Button type="submit" title="Text Code" />;
 };
