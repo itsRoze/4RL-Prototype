@@ -17,7 +17,6 @@ export const meta: MetaFunction = () => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  console.log("in server action");
   const { error, phone } = await sendCode(request);
   if (error) {
     return json({ error });
@@ -41,10 +40,9 @@ export default function Index() {
           <input
             type="tel"
             placeholder="Phone"
-            // required
+            required
             name="phone"
             className="focus-visible:ring-ring w-11/12 flex-1 bg-transparent focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
-            maxLength={10}
           />
         </div>
         <div className="h-8">

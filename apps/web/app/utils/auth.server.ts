@@ -59,3 +59,31 @@ export const sendCode = async (request: Request) => {
 
   return { error: undefined, phone };
 };
+
+export const resendCode = async (phone: string, request: Request) => {
+  try {
+    const { supabase } = await createClient(request);
+
+    const { error } = await supabase.auth.signInWithOtp({
+      phone: `+${phone}`,
+    });
+
+    if (error) {
+      console.error(error);
+      return {
+        error: error.message,
+      };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        error: error.message,
+      };
+    }
+
+    return {
+      error: "Oops, couldn't resend code",
+    };
+  }
+  return { error: undefined };
+};
