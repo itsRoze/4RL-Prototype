@@ -6,24 +6,12 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import {
-  json,
-  type LinksFunction,
-  type LoaderFunctionArgs,
-} from "@remix-run/node";
+import { type LinksFunction } from "@remix-run/node";
 import stylesheet from "~/tailwind.css?url";
-import { createClient } from "./lib/supabase/server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { supabase } = await createClient(request);
-  const user = (await supabase.auth.getUser()).data.user;
-  const isAuthenticated = !!user;
-  return json({ isAuthenticated });
-};
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

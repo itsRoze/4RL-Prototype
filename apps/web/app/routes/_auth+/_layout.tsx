@@ -1,5 +1,17 @@
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
 import { Tagline } from "~/components/tagline";
+import { createClient } from "~/lib/supabase/server";
+import { requireAnonymous } from "~/utils/auth.server";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { supabase, headers } = await createClient(request);
+  await requireAnonymous(supabase);
+
+  return new Response(null, {
+    headers,
+  });
+};
 
 export default function AuthLayout() {
   return (
