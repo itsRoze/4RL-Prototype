@@ -1,17 +1,26 @@
 import {
-  type MetaFunction,
-  type LoaderFunctionArgs,
-  type ActionFunctionArgs,
-  redirect,
   json,
+  redirect,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+  type MetaFunction,
 } from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useFetcher,
+  useLoaderData,
+} from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { Button } from "~/components/button";
 import ErrorCallout from "~/components/error-callout";
 import { Loader } from "~/components/loader";
-import { resendCode, verifyCode } from "~/utils/auth.server";
+import { verifyCode } from "~/utils/auth.server";
 import { formatPhoneForClient } from "~/utils/formatPhoneNumber";
 import { useIsPending } from "~/utils/hooks";
+import { action as resendAction } from "./auth.resend";
+import { createClient } from "~/lib/supabase/server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -32,19 +41,21 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  const { _action, ...values } = Object.fromEntries(formData);
-  if (_action === "resend") {
-    const { error } = await resendCode(String(values.phone), request);
+  const { supabase, headers } = await createClient(request);
+  const { error, ok } = await verifyCode(request, supabase);
+  if (error) {
     return {
       error,
-      ok: error ? false : true,
+      resend: {
+        ok: false,
+      },
     };
   }
 
-  if (_action === "submit") {
-    await verifyCode();
-    return null;
+  if (ok) {
+    return redirect("/home", {
+      headers: headers,
+    });
   }
 };
 
@@ -64,7 +75,7 @@ export default function Index() {
           </Link>
         </div>
       </div>
-      <TokenForm />
+      <TokenForm phone={phone} />
     </>
   );
 }
@@ -73,23 +84,36 @@ interface ResendProps {
   phone: string;
 }
 const Resend: React.FC<ResendProps> = ({ phone }) => {
-  const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<typeof resendAction>();
+  const [isSent, setIsSent] = useState(false);
 
-  if (actionData?.ok) {
+  useEffect(() => {
+    if (fetcher.data?.resend.ok) {
+      setIsSent(true);
+      const timeout = setTimeout(() => setIsSent(false), 8000);
+      return () => clearTimeout(timeout);
+    }
+  }, [fetcher.data]);
+
+  if (isSent) {
     return <p className="font-medium">Sent!</p>;
   }
 
   return (
-    <Form method="POST">
+    <fetcher.Form method="POST" action="/auth/resend">
       <input type="hidden" name="phone" value={phone} />
-      <button type="submit" name="_action" value="resend" className="underline">
+      <button type="submit" className="underline">
         Resend
       </button>
-    </Form>
+    </fetcher.Form>
   );
 };
 
-const TokenForm = () => {
+interface TokenFormProps {
+  phone: string;
+}
+
+const TokenForm: React.FC<TokenFormProps> = ({ phone }) => {
   const actionData = useActionData<typeof action>();
 
   const isPending = useIsPending();
@@ -100,6 +124,7 @@ const TokenForm = () => {
     >
       <div className="w-full">
         <div className="flex w-full items-center gap-2 border border-black px-2 py-4 text-2xl">
+          <input type="hidden" name="phone" value={phone} />
           <input
             type="text"
             placeholder="XXXXXX"
@@ -113,13 +138,7 @@ const TokenForm = () => {
       {isPending ? (
         <Loader />
       ) : (
-        <Button
-          type="submit"
-          name="_action"
-          disabled={isPending}
-          value="submit"
-          title="Take me in"
-        />
+        <Button type="submit" disabled={isPending} title="Take me in" />
       )}
     </Form>
   );

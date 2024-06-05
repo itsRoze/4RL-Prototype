@@ -37,6 +37,14 @@
       "outputs": [],
       "cache": false
     },
+    "@beta/db/#db": {
+      "outputs": [],
+      "cache": false
+    },
+    "@beta/db/#db:studio": {
+      "outputs": [],
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["build/**"]

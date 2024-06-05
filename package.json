@@ -22,7 +22,9 @@
     "format": "turbo format",
     "format:fix": "turbo format:fix",
     "load-secrets:prod": "sst secret load ./prod.env --stage=production",
-    "load-secrets:local": "sst secret load ./secrets.env"
+    "load-secrets:local": "sst secret load ./secrets.env",
+    "db": "turbo db",
+    "db:studio": "turbo db:studio"
   },
   "workspaces": [
     "packages/*",

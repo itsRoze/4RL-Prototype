@@ -1,4 +1,5 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { Form } from "@remix-run/react";
 import { createClient } from "~/lib/supabase/server";
 import { requireUser } from "~/utils/auth.server";
 
@@ -12,5 +13,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Home() {
-  return <h1>Home page</h1>;
+  return (
+    <>
+      <h1>Home page</h1>
+      <Logout />
+    </>
+  );
 }
+
+const Logout = () => {
+  return (
+    <Form method="post" action="/auth/logout">
+      <button type="submit">Logout</button>
+    </Form>
+  );
+};

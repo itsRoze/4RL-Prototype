@@ -8,6 +8,7 @@ import { Form, useActionData } from "@remix-run/react";
 import { Button } from "~/components/button";
 import ErrorCallout from "~/components/error-callout";
 import { Loader } from "~/components/loader";
+import { createClient } from "~/lib/supabase/server";
 import { sendCode } from "~/utils/auth.server";
 import { useIsPending } from "~/utils/hooks";
 
@@ -19,11 +20,14 @@ export const meta: MetaFunction = () => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { error, phone } = await sendCode(request);
+  const { supabase, headers } = await createClient(request);
+  const { error, phone } = await sendCode(request, supabase);
   if (error) {
     return json({ error });
   } else {
-    return redirect("/verify?phone=" + phone);
+    return redirect("/verify?phone=" + phone, {
+      headers: headers,
+    });
   }
 };
 

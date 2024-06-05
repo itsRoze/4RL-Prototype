@@ -1,3 +1,4 @@
+import { Analytic, Profile } from "@beta/db";
 import { redirect } from "@remix-run/node";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "~/lib/supabase/server";
@@ -21,7 +22,7 @@ export const requireAnonymous = async (supabase: SupabaseClient) => {
   }
 };
 
-export const sendCode = async (request: Request) => {
+export const sendCode = async (request: Request, supabase: SupabaseClient) => {
   const formData = await request.formData();
   const rawPhone = formData.get("phone") as string;
   if (!rawPhone) {
@@ -31,7 +32,6 @@ export const sendCode = async (request: Request) => {
   }
 
   const phone = `1${rawPhone.replace(/\D/g, "")}`;
-  const { supabase } = await createClient(request);
 
   try {
     // This will also create the user if they don't exist
@@ -88,11 +88,73 @@ export const resendCode = async (phone: string, request: Request) => {
   return { error: undefined };
 };
 
-// TODO: Complete
-export const verifyCode = async () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve("done");
-    }, 2000);
-  });
+export const verifyCode = async (
+  request: Request,
+  supabase: SupabaseClient,
+) => {
+  try {
+    const formData = await request.formData();
+
+    const token = String(formData.get("token"));
+    const phone = String(formData.get("phone"));
+    if (!token) {
+      console.error("No token provided");
+      return {
+        error: "No token provided",
+      };
+    }
+
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.verifyOtp({
+      type: "sms",
+      phone,
+      token,
+    });
+
+    if (error) {
+      console.error(error);
+      return {
+        error: error.message,
+      };
+    }
+
+    if (!user) {
+      return {
+        error: "Oops, something went wrong. Please try again.",
+      };
+    }
+
+    // see if this is a new user
+    let profile = await Profile.fromAuthId(user.id);
+    if (!profile) {
+      profile = await Profile.create({
+        auth_id: user.id,
+      });
+    }
+    if (!profile || !profile.auth_id) {
+      return {
+        error: "Failed to create profile. Please try again",
+      };
+    }
+
+    await Analytic.log({
+      user_auth_id: profile.auth_id,
+      type: "login",
+    });
+
+    return { error: undefined, ok: true };
+  } catch (error) {
+    console.error(error);
+    if (error instanceof Error) {
+      return {
+        error: error.message,
+      };
+    }
+
+    return {
+      error: "Oops, couldn't verify your code",
+    };
+  }
 };

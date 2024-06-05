@@ -11,6 +11,7 @@
     "sb:pull-prod": "supabase db pull --linked",
     "sb:push-local": "supabase db push --local",
     "sb:push-prod": "supabase db push",
-    "lint": "supabase db lint"
+    "lint": "supabase db lint",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .temp"
   }
 }
